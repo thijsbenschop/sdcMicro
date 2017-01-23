@@ -617,6 +617,27 @@ writeSafeFile <- function(obj, format, randomizeRecords, fileOut, ...) {
     }
     write_dta(data=dat, path=fileOut)
   }
+  if (format=="dtaold") {
+    # add label information
+    inp <- list(...)
+    new_labs <- inp$lab
+    if (!is.null(new_labs)) {
+      # restrict to existing variables in anonymized dataset
+      ll1 <- new_labs[[1]]
+      ii <- which(ll1$var.name %in% colnames(dat))
+      ll1 <- ll1[ii,]
+      new_labs[[1]] <- ll1
+      ll2 <- new_labs[[2]]
+      if (!is.null(ll2)) {
+        ii <- which(names(ll2) %in% colnames(dat))
+        ll2 <- ll2[ii]
+        new_labs[[2]] <- ll2
+      }
+      dat <- addVarLabels(dat, lab=new_labs)
+    }
+    write_dta(data=dat, path=fileOut)
+    writeDoFile(obj = obj, valLab = inp$lab[[2]], fileName = "default", fileOut = paste0(fileOut, ".txt")) 
+  }
   if (format=="csv") {
     inp <- list(...)
     write.table(dat, file=fileOut, col.names=inp$col.names, sep=inp$sep, dec=inp$dec)
