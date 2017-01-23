@@ -617,7 +617,7 @@ writeSafeFile <- function(obj, format, randomizeRecords, fileOut, ...) {
     }
     write_dta(data=dat, path=fileOut)
   }
-  if (format=="dtaold") {
+  if (format=="old.dta") {
     # add label information
     inp <- list(...)
     new_labs <- inp$lab
