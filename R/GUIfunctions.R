@@ -10,7 +10,8 @@ writeDoFile <- function(obj, valLab, fileName, fileOut){
 
 # Header of do file
 doFileText <- c(paste0("/* Run this do-file to add value labels to",  fileOut, "*/"), "#delimit ;", "")
-doFileText <- c(doFileText, "Number of vars", length(valLab))
+doFileText <- c(doFileText, "Number of vars", length(valLab[[2]]))
+doFileText <- c(doFileText, "Number of vars 2", length(valLab[[1]]))
 
 # Run through all variables
 for(i in 1:length(valLab)){ # use apply?
@@ -637,7 +638,7 @@ writeSafeFile <- function(obj, format, randomizeRecords, fileOut, ...) {
       dat <- addVarLabels(dat, lab=new_labs)
     }
     write_dta(data=dat, path=fileOut)
-    writeDoFile(obj = obj, valLab = inp$lab, fileName = "default", fileOut = paste0(substr(fileOut, 1, nchar(fileOut) - 4), ".txt")) 
+    writeDoFile(obj = obj, valLab = new_labs, fileName = "default", fileOut = paste0(substr(fileOut, 1, nchar(fileOut) - 4), ".txt")) 
   }
   if (format=="csv") {
     inp <- list(...)
