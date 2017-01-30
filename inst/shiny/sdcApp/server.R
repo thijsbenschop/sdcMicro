@@ -626,7 +626,7 @@ shinyServer(function(session, input, output) {
   code_export_anondata <- reactive({
     input$btn_export_anon_data # required for timestamp!
     if (input$dat_exp_type == "old.dta"){
-      fout <- paste0("exportedData_sdcMicro_",format(Sys.time(), "%Y%m%d_%H%M"),".", ".dta")
+      fout <- paste0("exportedData_sdcMicro_",format(Sys.time(), "%Y%m%d_%H%M"),".dta")
     }else{
       fout <- paste0("exportedData_sdcMicro_",format(Sys.time(), "%Y%m%d_%H%M"),".",input$dat_exp_type)
     }
