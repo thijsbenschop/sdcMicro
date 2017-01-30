@@ -9,7 +9,8 @@
 writeDoFile <- function(obj, valLab, fileName, fileOut){
 
 # Header of do file
-doFileText <- c("/* Run this do-file to add value labels to ADD HERE FILE NAME*/", "#delimit ;", "")
+doFileText <- c(paste0("/* Run this do-file to add value labels to",  fileOut, "*/"), "#delimit ;", "")
+doFileText <- c(doFileText, "Number of vars", length(valLab))
 
 # Run through all variables
 for(i in 1:length(valLab)){ # use apply?
