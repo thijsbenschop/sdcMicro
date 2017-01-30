@@ -13,7 +13,8 @@ doFileText <- c(paste0("/* Run this do-file to add value labels to",  fileOut, "
 doFileText <- c(doFileText, "Number of vars", length(valLab[[2]]))
 doFileText <- c(doFileText, "Number of vars 2", length(valLab[[1]]))
 doFileText <- c(doFileText, "Class", class(valLab[[1]]), class(valLab), class(valLab[[2]]))
-doFileText <- c(doFileText, "Class", class(obj), class(obj$stata_labs))
+doFileText <- c(doFileText, "Null", is.null(valLab))
+doFileText <- c(doFileText, "Class", class(obj))
 
 
 # Run through all variables
