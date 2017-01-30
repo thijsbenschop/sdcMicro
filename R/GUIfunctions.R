@@ -12,6 +12,7 @@ writeDoFile <- function(obj, valLab, fileName, fileOut){
 doFileText <- c(paste0("/* Run this do-file to add value labels to",  fileOut, "*/"), "#delimit ;", "")
 doFileText <- c(doFileText, "Number of vars", length(valLab[[2]]))
 doFileText <- c(doFileText, "Number of vars 2", length(valLab[[1]]))
+doFileText <- c(doFileText, "Class", class(valLab[[1]]), class(valLab), class(valLab[[2]]))
 
 # Run through all variables
 for(i in 1:length(valLab)){ # use apply?
