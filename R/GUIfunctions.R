@@ -15,8 +15,8 @@ valLab <- lab[[2]]
 
 # Run through all variables
 for(i in 1:length(valLab)){
-  if(!is.null(valLab[i])){ 
-    curvarname <- names(valLab[[i]])
+  if(!is.null(valLab[[i]])){ 
+    curvarname <- names(valLab[i])
     
     # Run through all values
     for(j in 1:length(valLab[[i]])){
