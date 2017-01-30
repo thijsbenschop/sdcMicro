@@ -13,6 +13,8 @@ doFileText <- c(paste0("/* Run this do-file to add value labels to",  fileOut, "
 doFileText <- c(doFileText, "Number of vars", length(valLab[[2]]))
 doFileText <- c(doFileText, "Number of vars 2", length(valLab[[1]]))
 doFileText <- c(doFileText, "Class", class(valLab[[1]]), class(valLab), class(valLab[[2]]))
+doFileText <- c(doFileText, "Class", class(obj), class(obj$stata_labs))
+
 
 # Run through all variables
 for(i in 1:length(valLab)){ # use apply?
@@ -624,6 +626,7 @@ writeSafeFile <- function(obj, format, randomizeRecords, fileOut, ...) {
     # add label information
     inp <- list(...)
     new_labs <- inp$lab
+    writeDoFile(obj = obj, valLab = new_labs, fileName = "default", fileOut = paste0(substr(fileOut, 1, nchar(fileOut) - 4), ".txt")) 
     if (!is.null(new_labs)) {
       # restrict to existing variables in anonymized dataset
       ll1 <- new_labs[[1]]
@@ -639,7 +642,6 @@ writeSafeFile <- function(obj, format, randomizeRecords, fileOut, ...) {
       dat <- addVarLabels(dat, lab=new_labs)
     }
     write_dta(data=dat, path=fileOut)
-    writeDoFile(obj = obj, valLab = new_labs, fileName = "default", fileOut = paste0(substr(fileOut, 1, nchar(fileOut) - 4), ".txt")) 
   }
   if (format=="csv") {
     inp <- list(...)
