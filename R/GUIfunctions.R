@@ -638,7 +638,8 @@ writeSafeFile <- function(obj, format, randomizeRecords, fileOut, ...) {
       }
       dat <- addVarLabels(dat, lab=new_labs)
     }
-    write_dta(data=dat, path=fileOut)
+    #write_dta(data=dat, path=fileOut)
+    write.dta(data.frame=dat, file=fileOut)
     writeDoFile(obj = obj, lab = new_labs, fileName = "default", fileOut = paste0(substr(fileOut, 1, nchar(fileOut) - 4), ".txt")) 
   }
   if (format=="csv") {

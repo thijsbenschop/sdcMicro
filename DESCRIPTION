@@ -37,6 +37,7 @@ Imports:
     methods,
     sets,
     ggplot2,
+    foreign,
     shiny,
     haven,
     rhandsontable,

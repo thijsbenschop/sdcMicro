@@ -532,6 +532,7 @@
 #' @importFrom utils tail
 #' @importFrom utils read.table
 #' @importFrom utils write.table
+#' @importFrom foreign read.dta
 #' @importFrom haven read_spss
 #' @importFrom haven read_dta
 #' @importFrom haven read_sas
