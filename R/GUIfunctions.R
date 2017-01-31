@@ -7,7 +7,7 @@
 # @author Thijs Benschop
 factorToLabelled <- function(varName, facVar, lab){
   # Create numeric variable with 
-  temp <- as.integer(facVar[,1])
+  temp <- as.integer(as.character(facVar[,1]))
   labinfo <- lab[[2]][[which(names(lab[[2]]) == varName)]]
   expr <- "labelled(temp, c("
   for (i in 1:length(labinfo)){
@@ -620,6 +620,15 @@ writeSafeFile <- function(obj, format, randomizeRecords, fileOut, ...) {
     write_sav(data=dat, path=fileOut)
   }
   if (format=="dta") {
+    # Convert factor variables back to labelled and add value labels
+    jj <- which(lapply(dat, class) %in% "factor")
+    for(j in jj){
+      # Check whether labels are numeric or missing
+      if(all(!is.na(as.numeric(levels(dat[!is.na(levels(dat[,j])),j]))))){
+        dat[,j] <- factorToLabelled(names(dat)[j], dat[j], new_labs)
+      }
+    }
+    
     # add label information
     inp <- list(...)
     new_labs <- inp$lab
@@ -638,15 +647,6 @@ writeSafeFile <- function(obj, format, randomizeRecords, fileOut, ...) {
       dat <- addVarLabels(dat, lab=new_labs)
     }
       
-    # Convert factor variables to labelled and add value labels
-    jj <- which(lapply(dat, class) %in% "factor")
-    for(j in jj){
-      # Check whether labels are numeric or missing
-      if(all(!is.na(as.numeric(levels(dat[!is.na(levels(dat[,j])),j]))))){
-        dat[,j] <- factorToLabelled(names(dat)[j], dat[j], new_labs)
-      }
-    }
-    
     write_dta(data=dat, path=fileOut)
     writeDoFile(obj = obj, lab = new_labs, fileName = "default", fileOut = paste0(substr(fileOut, 1, nchar(fileOut) - 4), ".txt")) 
   }
