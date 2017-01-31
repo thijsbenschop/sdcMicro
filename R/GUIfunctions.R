@@ -625,7 +625,7 @@ writeSafeFile <- function(obj, format, randomizeRecords, fileOut, ...) {
     for(j in jj){
       # Check whether labels are numeric or missing
       if(all(!is.na(as.numeric(levels(dat[!is.na(levels(dat[,j])),j]))))){
-        dat[,j] <- factorToLabelled(names(dat)[j], dat[j], new_labs)
+        dat[,j] <- factorToLabelled(names(dat)[j], dat[j], inp$lab)
       }
     }
     
