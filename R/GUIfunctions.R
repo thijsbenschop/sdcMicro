@@ -11,7 +11,7 @@ factorToLabelled <- function(varName, facVar, lab){
   labinfo <- lab[[2]][[which(names(lab[[2]]) == varName)]]
   expr <- "labelled(temp, c("
   for (i in 1:length(labinfo)){
-    expr <- paste0(expr, gsub(" |[[:punct:]]|[[:digit:]]", "", names(labinfo)[i]), " = ", labinfo[i])
+    expr <- paste0(expr, substr(gsub(" |[[:punct:]]|[[:digit:]]", "", names(labinfo)[i]), 1, 32), " = ", labinfo[i])
     if(i < length(labinfo)){expr <- paste0(expr, ", ")}
   }
   expr <- paste0(expr, "))")
@@ -669,7 +669,7 @@ writeSafeFile <- function(obj, format, randomizeRecords, fileOut, ...) {
       dat <- addVarLabels(dat, lab=new_labs)
     }
     #write_dta(data=dat, path=fileOut)
-    write.dta(data.frame=dat, file=fileOut)
+    #write.dta(data.frame=dat, file=fileOut)
     writeDoFile(obj = obj, lab = new_labs, fileName = "default", fileOut = paste0(substr(fileOut, 1, nchar(fileOut) - 4), ".txt")) 
   }
   if (format=="csv") {
