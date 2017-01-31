@@ -620,12 +620,15 @@ writeSafeFile <- function(obj, format, randomizeRecords, fileOut, ...) {
     write_sav(data=dat, path=fileOut)
   }
   if (format=="dta") {
+    inp <- list(...)
+    new_labs <- inp$lab
+    
     # Convert factor variables back to labelled and add value labels
     jj <- which(lapply(dat, class) %in% "factor")
     for(j in jj){
       # Check whether labels are numeric or missing
       if(all(!is.na(as.numeric(levels(dat[!is.na(levels(dat[,j])),j]))))){
-        dat[,j] <- factorToLabelled(names(dat)[j], dat[j], inp$lab)
+        dat[,j] <- factorToLabelled(names(dat)[j], dat[j], new_labs)
       }
     }
     
