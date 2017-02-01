@@ -7,7 +7,7 @@
 # @author Thijs Benschop
 factorToLabelled <- function(varName, facVar, lab){
   # Create numeric variable with value labels 
-  temp <- unlist(lapply(facVar, function(x){if(grepl("]", x)){as.numeric(substr(as.character(x), 2, regexpr("]", as.character(x)) - 1))}else{as.integer(as.character(x))}}))
+  temp <- unlist(lapply(facVar[,1], function(x){if(grepl("]", x)){as.numeric(substr(as.character(x), 2, regexpr("]", as.character(x)) - 1))}else{as.integer(as.character(x))}}))
   labinfo <- lab[[2]][[which(names(lab[[2]]) == varName)]]
   if(!is.null(labinfo)){
     expr <- "labelled(temp, c("
