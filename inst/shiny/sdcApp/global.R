@@ -373,7 +373,6 @@ obj$cur_selection_anon <- "btn_sel_anon_1" # navigation for anonymization
 
 # for stata-labelling
 obj$stata_labs <- NULL
-obj$stata_vallabs <- NULL
 obj$stata_varnames <- NULL
 
 # the path, where all output will be saved to
