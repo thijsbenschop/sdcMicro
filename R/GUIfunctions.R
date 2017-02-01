@@ -7,7 +7,7 @@
 # @author Thijs Benschop
 factorToLabelled <- function(varName, facVar, lab){
   # Create numeric variable with value labels 
-  temp <- as.integer(as.character(facVar[,1]))
+  temp <- unlist(lapply(facVar[,1], function(x){as.numeric(substr(as.character(x), 2, regexpr("]", as.character(x)) - 1))}))
   labinfo <- lab[[2]][[which(names(lab[[2]]) == varName)]]
   if(!is.null(labinfo)){
     expr <- "labelled(temp, c("
@@ -631,9 +631,9 @@ writeSafeFile <- function(obj, format, randomizeRecords, fileOut, ...) {
     jj <- which(lapply(dat, class) %in% "factor")
     for(j in jj){
       # Check whether labels are numeric or missing
-      if(all(!is.na(as.numeric(levels(dat[!is.na(levels(dat[,j])),j]))))){
+      #if(all(!is.na(as.numeric(levels(dat[!is.na(levels(dat[,j])),j]))))){
         dat[,j] <- factorToLabelled(names(dat)[j], dat[j], new_labs)
-      }
+      #}
     }
     
     # add label information
