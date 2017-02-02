@@ -34,7 +34,7 @@ factorToLabelled <- function(varName, facVar, lab){
 # @author Thijs Benschop
 updateValueLabel <- function(obj, var, before, after, lab){
   # Change level/label to numeric code if other variables are also numeric
-  manipKey <- get.sdcMicroObj(obj, type="manipKeyVars")
+  manipKey <- obj@manipKeyVars #get.sdcMicroObj(obj, type="manipKeyVars")
   
   ll <- levels(manipKey[[var]])
   numCode <- which(levels(manipKey[[var]]) == after[1])
