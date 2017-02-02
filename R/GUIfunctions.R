@@ -141,23 +141,23 @@ extractLabels <- function(dat){
   # # Check whether there are value labels available
   # if (!all(sapply(sapply(dat, function(x) { attr(x, "labels") }), is.null))) {
   # Save all value labels for variables of class labelled
-  valLab <- lapply(dat, function(x){attr(x, "labels")})
+  valLab <- NULL #lapply(dat, function(x){attr(x, "labels")})
   #} else {
   #  valLab <- NULL
   #}
   
-  # Collect value labels from string variables
-  jj <- which(lapply(valLab, is.null) == T)
-  for(j in jj){
-    # Find position of ] in each label (-1 indicates not found)
-    loc <- sapply(names(table(dat[,which(names(dat) %in% names(valLab[j]))])), function(x){regexpr("]", as.character(x))[1]})
-    # If each label contains ], implies string variable
-    if (all(loc != -1)){
-      labinfo <- as.integer(substr(as.character(names(loc)), 2, loc - 1)) # values
-      names(labinfo) <- substr(as.character(names(loc)), loc + 2, length(loc)) # values
-      valLab[[j]] <- labinfo
-    }
-  }
+  # # Collect value labels from string variables
+  # jj <- which(lapply(valLab, is.null) == T)
+  # for(j in jj){
+  #   # Find position of ] in each label (-1 indicates not found)
+  #   loc <- sapply(names(table(dat[,which(names(dat) %in% names(valLab[j]))])), function(x){regexpr("]", as.character(x))[1]})
+  #   # If each label contains ], implies string variable
+  #   if (all(loc != -1)){
+  #     labinfo <- as.integer(substr(as.character(names(loc)), 2, loc - 1)) # values
+  #     names(labinfo) <- substr(as.character(names(loc)), loc + 2, length(loc)) # values
+  #     valLab[[j]] <- labinfo
+  #   }
+  # }
   
   return(list(varLab, valLab))
 }
