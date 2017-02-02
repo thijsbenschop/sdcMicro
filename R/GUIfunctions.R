@@ -42,7 +42,8 @@ updateValueLabel <- function(obj, var, before, after, lab){
   if(all(!is.na(as.numeric(ll[-numCode])))){
     ll[ll == after[1]] <- numCode
     levels(manipKey[[var]]) <- ll
-    obj <- set.sdcMicroObj(obj, type="manipKeyVars", input=list(manipKey))
+    #obj <- set.sdcMicroObj(obj, type="manipKeyVars", input=list(manipKey))
+    obj@manipKeyVars <- manipKey
     
     # Update lab info by removing the before levels and adding the after level
     labinfo <- lab[[2]][[which(names(lab[[2]]) == var)]]
