@@ -339,6 +339,20 @@ shinyServer(function(session, input, output) {
     txt_action <- paste0("Recoded ",dQuote(input$sel_recfac),": ", VecToRStr_txt(input$cbg_recfac)," to ",VecToRStr_txt(input$inp_newlevname_rec))
     return(list(cmd=cmd, txt_action=txt_action))
   })
+  
+  # code to update value levels after recoding
+  code_updateVarlabel_keyvar() <- reactive({
+    cmd <- paste0("resultUpdateVarLab <- groupAndRename(obj=sdcObj")
+    cmd <- paste0(cmd, ", var=",dQuote(input$sel_factor))
+    cmd <- paste0(cmd, ", before=",VecToRStr(input$cbg_factor, quoted=TRUE))
+    cmd <- paste0(cmd, ", after=",VecToRStr(input$inp_newlevname, quoted=TRUE))
+    cmd <- paste0(cmd, ", lab=obj$stata_labs);")
+    cmd <- paste0("sdcObj <- resultUpdateVarLab[[1]];")
+    cmd <- paste0("obj$stata_labs <- resultUpdateVarLab[[2]];")
+    cmd <- paste0("rm(resultUpdateVarLab);")
+    txt_action <- paste0("Update value labels after recoding")
+    return(list(cmd=cmd, txt_action=txt_action))
+  })
 
   # code for local suppression with threshold
   code_suppThreshold <- reactive({
@@ -1168,6 +1182,10 @@ shinyServer(function(session, input, output) {
     ptm <- proc.time()
     res <- code_groupAndRename_keyvar()
     runEvalStr(cmd=res$cmd, comment="## Recode variable")
+    if(!is.null(obj$stata_labs)){
+      res2 <- code_updateVarlabel_keyvar()
+      runEvalStr(cmd=res2$cmd, comment="Update value labels after recoding")
+    } 
     ptm <- proc.time()-ptm
     obj$comptime <- obj$comptime+ptm[3]
     if (is.null(lastError())) {
