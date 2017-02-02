@@ -146,12 +146,9 @@ extractLabels <- function(dat){
   
   # # Check whether there are value labels available
   # if (!all(sapply(sapply(dat, function(x) { attr(x, "labels") }), is.null))) {
-  # Save all value labels for variables of class labelled
+  # Save all value labels for variables of class labelled, if no info list of NULL
   valLab <- lapply(dat, function(x){attr(x, "labels")})
-  #} else {
-  #  valLab <- NULL
-  #}
-
+  
   # Collect value labels from string variables
   jj <- which(lapply(valLab, is.null) == T)
   for(j in jj){
@@ -506,10 +503,10 @@ readMicrodata <- function(path, type, convertCharToFac=TRUE, drop_all_missings=T
   cl_lab <- which(sapply(res, class)=="labelled")
   if (length(cl_lab) > 0) {
     if (length(cl_lab)==1) {
-      res[[cl_lab]] <- as_factor(res[[cl_lab]], "both")
+      res[[cl_lab]] <- as_factor(res[[cl_lab]], levels="both")
     } else {
       res[,cl_lab] <- lapply(res[,cl_lab] , function(x) {
-        as_factor(x, "both")
+        as_factor(x, levels="both")
       })
     }
   }
