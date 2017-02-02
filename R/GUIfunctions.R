@@ -134,10 +134,16 @@ extractLabels <- function(dat){
     varLab <- as.data.frame(cbind(colnames(dat), lapply(dat, function(x){attr(x, "label")})))
     colnames(varLab) <- c("var.name", "var.label")
     rownames(varLab) <- NULL
+    # Set to NULL values in var.label to NA
+    varLab[which(sapply(sapply(dat, function(x) { attr(x, "label") }), is.null)), 2] <- NA
+    # Check whether all strings are UTF-8 encoded    
+    if(!all(validUTF8(unlist(sapply(dat, function(x) { attr(x, "label") }))))){
+      return(sum(!validUTF8(unlist(sapply(dat, function(x) { attr(x, "label") })))))
+    }
   } else {
     varLab <- NULL
   }
-
+  
   # # Check whether there are value labels available
   # if (!all(sapply(sapply(dat, function(x) { attr(x, "labels") }), is.null))) {
   # Save all value labels for variables of class labelled
