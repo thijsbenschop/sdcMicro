@@ -81,9 +81,9 @@ setMethod(f="updateValueLabelX", signature=c("sdcMicroObj"), definition=function
      labinfo <- labinfo[-which(labinfo == before[-1])]
     }
     lab[[2]][[which(names(lab[[2]]) == var)]] <- labinfo
-    return(list(obj, lab)) #return(obj) # # 
+    return(obj) # # return(list(obj, lab))
   }else{
-    return(list(obj, lab)) #return(obj) # # 
+    return(obj) #   return(list(obj, lab))
   }
 })
 
