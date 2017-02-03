@@ -100,6 +100,31 @@ runEvalStrMicrodat <- function(cmd, comment=NULL) {
   }
 }
 
+# runEvaluationString and update Objects for label info-modifications
+runEvalStrLab <- function(cmd, comment=NULL) {
+  # evaluate using tryCatchFn()
+  cmdeval <- gsub("sdcObj","obj$sdcObj", cmd)
+  cmdeval <- gsub("stataLabs","obj$stata_labs", cmd)
+  cmdeval <- strsplit(cmdeval, "<-")[[1]][2]
+  evalstr <- paste0("res <- sdcMicro:::tryCatchFn({",cmdeval,"})")
+  #cat("evalstr:", evalstr,"\n")
+  eval(parse(text=evalstr))
+  #print(str(res))
+  if (!"simpleError" %in% class(res)) {
+    obj$last_error <- NULL
+    obj$stata_labs <- res; rm(res)
+    
+    if (!is.null(comment)) {
+      cmd <- paste0(comment,"\n",cmd)
+    }
+    obj$code_read_and_modify <- c(obj$code_read_and_modify, cmd)
+    # check if we have some new warnings
+  } else {
+    obj$last_error <- res$message
+    obj$last_warning <- NULL
+  }
+}
+
 # required code to temporarily reset strata-variable
 # new_strataV: new strata variable
 # ex_strataV: existing strata variable

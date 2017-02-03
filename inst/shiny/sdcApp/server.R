@@ -341,15 +341,23 @@ shinyServer(function(session, input, output) {
   })
   
   # code to update value levels after recoding
-  code_updateVarlabel_keyvar <- reactive({
-    cmd <- paste0("resultUpdateVarLab <- updateValueLabel(obj=sdcObj")
+  code_updateLevel_keyvar <- reactive({
+    cmd <- paste0("sdcObj <- updateLevel(obj=sdcObj")
     cmd <- paste0(cmd, ", var=",dQuote(input$sel_recfac))
     cmd <- paste0(cmd, ", before=",VecToRStr(input$cbg_factor, quoted=TRUE))
     cmd <- paste0(cmd, ", after=",VecToRStr(input$inp_newlevname, quoted=TRUE))
     cmd <- paste0(cmd, ", lab=obj$stata_labs);")
-    #cmd <- paste0("sdcObj <- resultUpdateVarLab[[1]];")
-    #cmd <- paste0("obj$stata_labs <- resultUpdateVarLab[[2]];")
-    #cmd <- paste0("rm(resultUpdateVarLab);")
+    txt_action <- paste0("Update levels after recoding")
+    return(list(cmd=cmd, txt_action=txt_action))
+  })
+  
+  # code to update label information after recoding
+  code_updateLabel_keyvar <- reactive({
+    cmd <- paste0("stataLabs <- updateLabel(obj=sdcObj")
+    cmd <- paste0(cmd, ", var=",dQuote(input$sel_recfac))
+    cmd <- paste0(cmd, ", before=",VecToRStr(input$cbg_factor, quoted=TRUE))
+    cmd <- paste0(cmd, ", after=",VecToRStr(input$inp_newlevname, quoted=TRUE))
+    cmd <- paste0(cmd, ", lab=stataLabs);")
     txt_action <- paste0("Update value labels after recoding")
     return(list(cmd=cmd, txt_action=txt_action))
   })
@@ -1183,8 +1191,10 @@ shinyServer(function(session, input, output) {
     res <- code_groupAndRename_keyvar()
     runEvalStr(cmd=res$cmd, comment="## Recode variable")
     if(!is.null(obj$stata_labs)){
-     res2 <- code_updateVarlabel_keyvar()
-    runEvalStr(cmd=res2$cmd, comment="## Update value labels after recoding")
+     res2 <- code_updateLevel_keyvar()
+     runEvalStr(cmd=res2$cmd, comment="## Update levels after recoding")
+     res3 <- code_updateLabel_keyvar()
+     runEvalStrLab(cmd=res2$cmd, comment="## Update value labels after recoding")
     } 
     ptm <- proc.time()-ptm
     obj$comptime <- obj$comptime+ptm[3]
