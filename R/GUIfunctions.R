@@ -98,7 +98,7 @@ setMethod(f="updateLabelX", signature=c("sdcMicroObj"), definition=function(obj,
   if(all(regexpr("]", ll) != -1)){
     numCode <- which(as.numeric(substr(as.character(levels(manipKey[[var]])), 2, regexpr("]", as.character(levels(manipKey[[var]]))) - 1)) 
                      == as.numeric(substr(as.character(after[1]), 2, regexpr("]", as.character(after[1])) - 1)))
-    
+    cat(numCode)
     # Update lab info by removing the before levels and adding the after level
     labinfo <- lab[[2]][[which(names(lab[[2]]) == var)]]
     
