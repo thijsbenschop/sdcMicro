@@ -342,11 +342,16 @@ shinyServer(function(session, input, output) {
   
   # code to update value levels after recoding
   code_updateVarlabel_keyvar <- reactive({
-    cmd <- paste0("resultUpdateVarLab <- updateValueLabel(obj=obj$sdcObj")
+    cmd <- paste0("obj$sdcObj <- updateValueLabel(obj=obj$sdcObj")
     cmd <- paste0(cmd, ", var=",dQuote(input$sel_recfac))
     cmd <- paste0(cmd, ", before=",VecToRStr(input$cbg_factor, quoted=TRUE))
     cmd <- paste0(cmd, ", after=",VecToRStr(input$inp_newlevname, quoted=TRUE))
-    cmd <- paste0(cmd, ", lab=obj$stata_labs);")
+    cmd <- paste0(cmd, ", lab=obj$stata_labs)[[1]];")
+    cmd <- paste0("obj$stata_labs <- updateValueLabel(obj=obj$sdcObj")
+    cmd <- paste0(cmd, ", var=",dQuote(input$sel_recfac))
+    cmd <- paste0(cmd, ", before=",VecToRStr(input$cbg_factor, quoted=TRUE))
+    cmd <- paste0(cmd, ", after=",VecToRStr(input$inp_newlevname, quoted=TRUE))
+    cmd <- paste0(cmd, ", lab=obj$stata_labs)[[2]];")
     #cmd <- paste0("sdcObj <- resultUpdateVarLab[[1]];")
     #cmd <- paste0("obj$stata_labs <- resultUpdateVarLab[[2]];")
     #cmd <- paste0("rm(resultUpdateVarLab);")
