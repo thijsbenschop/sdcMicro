@@ -1183,7 +1183,8 @@ shinyServer(function(session, input, output) {
     res <- code_groupAndRename_keyvar()
     runEvalStr(cmd=res$cmd, comment="## Recode variable")
     if(!is.null(obj$stata_labs)){
-       eval(parse(code_updateVarlabel_keyvar()[[cmd]]))
+      res2 <- code_updateVarlabel_keyvar()
+      eval(parse(res2$cmd))
       #runEvalStr(cmd=res2$cmd, comment="## Update value labels after recoding")
     } 
     ptm <- proc.time()-ptm
