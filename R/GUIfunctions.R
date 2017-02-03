@@ -59,9 +59,9 @@ setMethod(f="updateValueLabelX", signature=c("sdcMicroObj"), definition=function
   
   # Change level/label to numeric code if other variables are also numeric
   manipKey <- get.sdcMicroObj(obj, type="manipKeyVars") #obj@manipKeyVars
-  # 
-  # ll <- levels(manipKey[[var]])
-  # numCode <- which(levels(manipKey[[var]]) == after[1])
+  
+  ll <- levels(manipKey[[var]])
+  numCode <- which(levels(manipKey[[var]]) == after[1])
   # # Check whether all other levels are numeric
   # if(all(!is.na(as.numeric(ll[-numCode])))){
   #   ll[ll == after[1]] <- numCode
@@ -69,23 +69,23 @@ setMethod(f="updateValueLabelX", signature=c("sdcMicroObj"), definition=function
   #   #obj <- set.sdcMicroObj(obj, type="manipKeyVars", input=list(manipKey))
   #   obj@manipKeyVars <- manipKey
   #   
-    # # Update lab info by removing the before levels and adding the after level
-    # labinfo <- lab[[2]][[which(names(lab[[2]]) == var)]]
-    # 
-    # if(length(before) == 1){
-    #   names(labinfo)[which(labinfo == before[1])] <- after[1]
-    #   labinfo[which(labinfo == before[1])] <- numCode
-    # }else{
-    #   names(labinfo)[which(labinfo == before[1])] <- after[1]
-    #   labinfo[which(labinfo == before[1])] <- numCode
-    #   labinfo <- labinfo[-which(labinfo == before[-1])]
-    # }
-    # lab[[2]][[which(names(lab[[2]]) == var)]] <- labinfo
+    # Update lab info by removing the before levels and adding the after level
+    labinfo <- lab[[2]][[which(names(lab[[2]]) == var)]]
+
+    if(length(before) == 1){
+      names(labinfo)[which(labinfo == before[1])] <- after[1]
+      labinfo[which(labinfo == before[1])] <- numCode
+    }else{
+      names(labinfo)[which(labinfo == before[1])] <- after[1]
+      labinfo[which(labinfo == before[1])] <- numCode
+      labinfo <- labinfo[-which(labinfo == before[-1])]
+    }
+    lab[[2]][[which(names(lab[[2]]) == var)]] <- labinfo
     # # return(list(obj, lab))
   # }else{
   #   return(list(obj, lab))
   # }
-  return(obj)
+  return(lab)
 })
 
 # Writes a do file to add value labels to a Stata file
