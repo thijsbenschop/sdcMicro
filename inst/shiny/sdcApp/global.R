@@ -36,7 +36,7 @@ runEvalStr <- function(cmd, comment=NULL) {
     }
   }
   evalstr <- paste0("res <- sdcMicro:::tryCatchFn({",cmdeval,"})")
-  #cat(evalstr,"\n")
+  cat(evalstr,"\n")
   eval(parse(text=evalstr))
   if (!"simpleError" %in% class(res)) {
     obj$last_error <- NULL
