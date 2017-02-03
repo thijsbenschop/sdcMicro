@@ -1188,26 +1188,17 @@ shinyServer(function(session, input, output) {
     ptm <- proc.time()
     res <- code_groupAndRename_keyvar()
     runEvalStr(cmd=res$cmd, comment="## Recode variable")
-    # if(!is.null(obj$stata_labs)){
-    #  res2 <- code_updateLevel_keyvar()
-    #  runEvalStr(cmd=res2$cmd, comment="## Update levels after recoding")
-    #  res3 <- code_updateLabel_keyvar()
-    #  runEvalStrLab(cmd=res3$cmd, comment="## Update value labels after recoding")
-    # } 
+    if(!is.null(obj$stata_labs)){
+     res2 <- code_updateLevel_keyvar()
+     runEvalStr(cmd=res2$cmd, comment="## Update levels after recoding")
+     res3 <- code_updateLabel_keyvar()
+     runEvalStrLab(cmd=res3$cmd, comment="## Update value labels after recoding")
+    }
     ptm <- proc.time()-ptm
     obj$comptime <- obj$comptime+ptm[3]
     if (is.null(lastError())) {
       obj$lastaction <- res$txt_action
       obj$anon_performed <- c(obj$anon_performed, res$txt_action)
-    }
-  })
-  
-  observeEvent(input$btn_update_recfac, {
-    if(!is.null(obj$stata_labs)){
-      res2 <- code_updateLevel_keyvar()
-      runEvalStr(cmd=res2$cmd, comment="## Update levels after recoding")
-      res3 <- code_updateLabel_keyvar()
-      runEvalStrLab(cmd=res3$cmd, comment="## Update value labels after recoding")
     }
   })
 
