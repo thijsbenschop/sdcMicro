@@ -344,7 +344,7 @@ shinyServer(function(session, input, output) {
   code_updateLevel_keyvar <- reactive({
     cmd <- paste0("sdcObj <- updateLevel(obj=sdcObj")
     cmd <- paste0(cmd, ", var=",dQuote(input$sel_recfac))
-    cmd <- paste0(cmd, ", before=",VecToRStr(input$cbg_factor, quoted=TRUE))
+    cmd <- paste0(cmd, ", before=",dQuote(input$sel_recfac))
     cmd <- paste0(cmd, ", after=",VecToRStr(input$inp_newlevname, quoted=TRUE))
     cmd <- paste0(cmd, ", lab=obj$stata_labs);")
     return(list(cmd=cmd))
@@ -355,7 +355,7 @@ shinyServer(function(session, input, output) {
     cmd <- paste0("stataLabs <- updateLabel(obj=sdcObj")
     cmd <- paste0(cmd, ", var=",dQuote(input$sel_recfac))
     cmd <- paste0(cmd, ", before=",VecToRStr(input$cbg_factor, quoted=TRUE))
-    cmd <- paste0(cmd, ", after=",VecToRStr(input$inp_newlevname, quoted=TRUE))
+    cmd <- paste0(cmd, ", after=",dQuote(input$sel_recfac))
     cmd <- paste0(cmd, ", lab=stataLabs);")
     return(list(cmd=cmd))
   })
