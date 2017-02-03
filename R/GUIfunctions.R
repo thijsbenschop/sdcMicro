@@ -58,7 +58,6 @@ setMethod(f="updateLevelX", signature=c("sdcMicroObj"), definition=function(obj,
     ll[ll == after[1]] <- paste0("[", numCode, "] ", after)
     levels(manipKey[[var]]) <- ll
     obj <- set.sdcMicroObj(obj, type="manipKeyVars", input=list(manipKey))
-    #obj@manipKeyVars <- manipKey
 
     return(obj)
   }else{
@@ -94,11 +93,10 @@ setMethod(f="updateLabelX", signature=c("sdcMicroObj"), definition=function(obj,
   # Change level/label to numeric code if other variables are also numeric
   manipKey <- get.sdcMicroObj(obj, type="manipKeyVars") #obj@manipKeyVars
   
-  ll <- levels(manipKey[[var]])
-  numCode <- which(levels(manipKey[[var]]) == after[1])
   # Check whether all other levels have numeric component
   if(all(regexpr("]", ll[-numCode]) != -1)){
-    ll[ll == after[1]] <- numCode
+    numCode <- which(as.numeric(substr(as.character(levels(manipKey[[var]])), 2, regexpr("]", as.character(levels(manipKey[[var]]))) - 1)) 
+          == as.numeric(substr(as.character(after[1]), 2, regexpr("]", as.character(after[1])) - 1)))
     
     # Update lab info by removing the before levels and adding the after level
     labinfo <- lab[[2]][[which(names(lab[[2]]) == var)]]
