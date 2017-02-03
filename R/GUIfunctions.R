@@ -53,8 +53,8 @@ setMethod(f="updateLevelX", signature=c("sdcMicroObj"), definition=function(obj,
   
   ll <- levels(manipKey[[var]])
   numCode <- which(levels(manipKey[[var]]) == after[1])
-  # Check whether all other levels are numeric
-  if(all(!is.na(as.numeric(ll[-numCode])))){
+  # Check whether all other levels have numeric component
+  if(all(regexpr("]", ll[-numCode]) != -1)){
     ll[ll == after[1]] <- paste0("[", numCode, "] ", after)
     levels(manipKey[[var]]) <- ll
     obj <- set.sdcMicroObj(obj, type="manipKeyVars", input=list(manipKey))
@@ -95,22 +95,21 @@ setMethod(f="updateLabelX", signature=c("sdcMicroObj"), definition=function(obj,
   manipKey <- get.sdcMicroObj(obj, type="manipKeyVars") #obj@manipKeyVars
   
   ll <- levels(manipKey[[var]])
-  cat(ll)
   numCode <- which(levels(manipKey[[var]]) == after[1])
-  # Check whether all other levels are numeric
-  if(all(!is.na(as.numeric(ll[-numCode])))){
+  # Check whether all other levels have numeric component
+  if(all(regexpr("]", ll[-numCode]) != -1)){
     ll[ll == after[1]] <- numCode
     
     # Update lab info by removing the before levels and adding the after level
     labinfo <- lab[[2]][[which(names(lab[[2]]) == var)]]
     
     if(length(before) == 1){
-      names(labinfo)[which(labinfo == before[1])] <- after[1]
+      names(labinfo)[which(labinfo == as.numeric(substr(as.character(before[1]), 2, regexpr("]", as.character(before[1])) - 1)))] <- after[1]
       labinfo[which(labinfo == before[1])] <- numCode
     }else{
-      names(labinfo)[which(labinfo == before[1])] <- after[1]
-      labinfo[which(labinfo == before[1])] <- numCode
-      labinfo <- labinfo[-which(labinfo == before[-1])]
+      names(labinfo)[which(labinfo == as.numeric(substr(as.character(before[1]), 2, regexpr("]", as.character(before[1])) - 1)))] <- after[1]
+      labinfo[which(labinfo == as.numeric(substr(as.character(before[1]), 2, regexpr("]", as.character(before[1])) - 1)))] <- numCode
+      labinfo <- labinfo[-which(labinfo == as.numeric(substr(as.character(before[-1]), 2, regexpr("]", as.character(before[-1])) - 1)))]
     }
     lab[[2]][[which(names(lab[[2]]) == var)]] <- labinfo
     return(lab) 
