@@ -63,7 +63,7 @@ setMethod(f="updateValueLabelX", signature=c("sdcMicroObj"), definition=function
   ll <- levels(manipKey[[var]])
   numCode <- which(levels(manipKey[[var]]) == after[1])
   # Check whether all other levels are numeric
-  if(all(!is.na(as.numeric(ll[-numCode])))){
+  # if(all(!is.na(as.numeric(ll[-numCode])))){
     ll[ll == after[1]] <- numCode
     levels(manipKey[[var]]) <- ll
     #obj <- set.sdcMicroObj(obj, type="manipKeyVars", input=list(manipKey))
