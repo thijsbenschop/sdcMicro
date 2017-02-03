@@ -1186,12 +1186,16 @@ shinyServer(function(session, input, output) {
   # event to update/modify an existing factor variable
   observeEvent(input$btn_update_recfac, {
     ptm <- proc.time()
+    #res <- code_groupAndRename_keyvar()
+    res2 <- code_updateLevel_keyvar()
+    res3 <- code_updateLabel_keyvar()
     res <- code_groupAndRename_keyvar()
+    
     runEvalStr(cmd=res$cmd, comment="## Recode variable")
     if(!is.null(obj$stata_labs)){
-     res2 <- code_updateLevel_keyvar()
+     #res2 <- code_updateLevel_keyvar()
      runEvalStr(cmd=res2$cmd, comment="## Update levels after recoding")
-     res3 <- code_updateLabel_keyvar()
+     #res3 <- code_updateLabel_keyvar()
      runEvalStrLab(cmd=res3$cmd, comment="## Update value labels after recoding")
     } 
     ptm <- proc.time()-ptm
