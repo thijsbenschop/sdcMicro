@@ -104,7 +104,7 @@ runEvalStrMicrodat <- function(cmd, comment=NULL) {
 runEvalStrLab <- function(cmd, comment=NULL) {
   # evaluate using tryCatchFn()
   cmdeval <- gsub("sdcObj","obj$sdcObj", cmd)
-  cmdeval <- gsub("stataLabs","obj$stata_labs", cmd)
+  cmdeval <- gsub("stataLabs","obj$stata_labs", cmdeval)
   cmdeval <- strsplit(cmdeval, "<-")[[1]][2]
   evalstr <- paste0("res <- sdcMicro:::tryCatchFn({",cmdeval,"})")
   cat("evalstr:", evalstr,"\n")

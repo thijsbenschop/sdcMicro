@@ -55,10 +55,10 @@ setMethod(f="updateLevelX", signature=c("sdcMicroObj"), definition=function(obj,
   numCode <- which(levels(manipKey[[var]]) == after[1])
   # Check whether all other levels are numeric
   if(all(!is.na(as.numeric(ll[-numCode])))){
-    ll[ll == after[1]] <- numCode
+    ll[ll == after[1]] <- paste0("[", numCode, "] ", after)
     levels(manipKey[[var]]) <- ll
-    #obj <- set.sdcMicroObj(obj, type="manipKeyVars", input=list(manipKey))
-    obj@manipKeyVars <- manipKey
+    obj <- set.sdcMicroObj(obj, type="manipKeyVars", input=list(manipKey))
+    #obj@manipKeyVars <- manipKey
 
     return(obj)
   }else{
