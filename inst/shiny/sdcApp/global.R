@@ -103,6 +103,7 @@ runEvalStrMicrodat <- function(cmd, comment=NULL) {
 # runEvaluationString and update Objects for label info-modifications
 runEvalStrLab <- function(cmd, comment=NULL) {
   # evaluate using tryCatchFn()
+  cat(cmd)
   cmdeval <- gsub("sdcObj","obj$sdcObj", cmd)
   cmdeval <- gsub("stataLabs","obj$stata_labs", cmdeval)
   cmdeval <- strsplit(cmdeval, "<-")[[1]][2]

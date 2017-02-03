@@ -344,12 +344,10 @@ shinyServer(function(session, input, output) {
   code_updateLevel_keyvar <- reactive({
     cmd <- paste0("sdcObj <- updateLevel(obj=sdcObj")
     cmd <- paste0(cmd, ", var=",dQuote(input$sel_recfac))
-    cmd <- paste0(cmd, ", before=", paste0('c("',paste(input$cbg_factor, collapse='","'),'")'))
-    #cmd <- paste0(cmd, ", before=",VecToRStr(input$cbg_factor, quoted=TRUE))
+    cmd <- paste0(cmd, ", before=",VecToRStr(input$cbg_factor, quoted=TRUE))
     cmd <- paste0(cmd, ", after=",VecToRStr(input$inp_newlevname, quoted=TRUE))
     cmd <- paste0(cmd, ", lab=obj$stata_labs);")
-    txt_action <- paste0("Update levels after recoding")
-    return(list(cmd=cmd, txt_action=txt_action))
+    return(list(cmd=cmd))
   })
   
   # code to update label information after recoding
@@ -359,8 +357,7 @@ shinyServer(function(session, input, output) {
     cmd <- paste0(cmd, ", before=",VecToRStr(input$cbg_factor, quoted=TRUE))
     cmd <- paste0(cmd, ", after=",VecToRStr(input$inp_newlevname, quoted=TRUE))
     cmd <- paste0(cmd, ", lab=stataLabs);")
-    txt_action <- paste0("Update value labels after recoding")
-    return(list(cmd=cmd, txt_action=txt_action))
+    return(list(cmd=cmd))
   })
 
   # code for local suppression with threshold
