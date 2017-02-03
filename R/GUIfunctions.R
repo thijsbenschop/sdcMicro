@@ -53,6 +53,7 @@ setMethod(f="updateLevelX", signature=c("sdcMicroObj"), definition=function(obj,
   
   ll <- levels(manipKey[[var]])
   numCode <- which(levels(manipKey[[var]]) == after[1])
+  cat(numCode, "this is numCode", "\n")
   # Check whether all other levels have numeric component
   if(all(regexpr("]", ll[-numCode]) != -1)){
     ll[ll == after[1]] <- paste0("[", numCode, "] ", after)
@@ -89,12 +90,12 @@ setMethod(f="updateLabelX", signature=c("sdcMicroObj"), definition=function(obj,
   if (!class(obj)=="sdcMicroObj") {
     stop("invalid input in argument 'obj'\n")
   }
-  cat("Hello")
+  cat("Hello", "\n")
   # Change level/label to numeric code if other variables are also numeric
   manipKey <- get.sdcMicroObj(obj, type="manipKeyVars") #obj@manipKeyVars
   ll <- levels(manipKey[[var]])
-  cat(ll)
-  cat(after[1])
+  cat("levels", ll, "\n")
+  cat("After", after[1], , "\n")
   # Check whether all other levels have numeric component
   if(all(regexpr("]", ll) != -1)){
     numCode <- which(as.numeric(substr(as.character(levels(manipKey[[var]])), 2, regexpr("]", as.character(levels(manipKey[[var]]))) - 1)) 
