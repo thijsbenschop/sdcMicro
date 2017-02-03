@@ -58,7 +58,7 @@ setMethod(f="updateValueLabelX", signature=c("sdcMicroObj"), definition=function
   }
   
   # Change level/label to numeric code if other variables are also numeric
-  #manipKey <- obj@manipKeyVars #get.sdcMicroObj(obj, type="manipKeyVars")
+  manipKey <- get.sdcMicroObj(obj, type="manipKeyVars") #obj@manipKeyVars
   # 
   # ll <- levels(manipKey[[var]])
   # numCode <- which(levels(manipKey[[var]]) == after[1])
