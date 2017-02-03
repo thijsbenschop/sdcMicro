@@ -1194,7 +1194,7 @@ shinyServer(function(session, input, output) {
      res2 <- code_updateLevel_keyvar()
      runEvalStr(cmd=res2$cmd, comment="## Update levels after recoding")
      res3 <- code_updateLabel_keyvar()
-     runEvalStrLab(cmd=res2$cmd, comment="## Update value labels after recoding")
+     runEvalStrLab(cmd=res3$cmd, comment="## Update value labels after recoding")
     } 
     ptm <- proc.time()-ptm
     obj$comptime <- obj$comptime+ptm[3]

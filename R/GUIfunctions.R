@@ -60,21 +60,9 @@ setMethod(f="updateLevelX", signature=c("sdcMicroObj"), definition=function(obj,
     #obj <- set.sdcMicroObj(obj, type="manipKeyVars", input=list(manipKey))
     obj@manipKeyVars <- manipKey
 
-    # Update lab info by removing the before levels and adding the after level
-    labinfo <- lab[[2]][[which(names(lab[[2]]) == var)]]
-    
-    if(length(before) == 1){
-     names(labinfo)[which(labinfo == before[1])] <- after[1]
-     labinfo[which(labinfo == before[1])] <- numCode
-    }else{
-     names(labinfo)[which(labinfo == before[1])] <- after[1]
-     labinfo[which(labinfo == before[1])] <- numCode
-     labinfo <- labinfo[-which(labinfo == before[-1])]
-    }
-    lab[[2]][[which(names(lab[[2]]) == var)]] <- labinfo
-    return(obj) # # return(list(obj, lab))
+    return(obj)
   }else{
-    return(obj) #   return(list(obj, lab))
+    return(obj)
   }
 })
 
@@ -111,9 +99,6 @@ setMethod(f="updateLabelX", signature=c("sdcMicroObj"), definition=function(obj,
   # Check whether all other levels are numeric
   if(all(!is.na(as.numeric(ll[-numCode])))){
     ll[ll == after[1]] <- numCode
-    levels(manipKey[[var]]) <- ll
-    #obj <- set.sdcMicroObj(obj, type="manipKeyVars", input=list(manipKey))
-    obj@manipKeyVars <- manipKey
     
     # Update lab info by removing the before levels and adding the after level
     labinfo <- lab[[2]][[which(names(lab[[2]]) == var)]]

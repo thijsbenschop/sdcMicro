@@ -107,7 +107,7 @@ runEvalStrLab <- function(cmd, comment=NULL) {
   cmdeval <- gsub("stataLabs","obj$stata_labs", cmd)
   cmdeval <- strsplit(cmdeval, "<-")[[1]][2]
   evalstr <- paste0("res <- sdcMicro:::tryCatchFn({",cmdeval,"})")
-  #cat("evalstr:", evalstr,"\n")
+  cat("evalstr:", evalstr,"\n")
   eval(parse(text=evalstr))
   #print(str(res))
   if (!"simpleError" %in% class(res)) {
