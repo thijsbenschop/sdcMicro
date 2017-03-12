@@ -519,7 +519,7 @@ sdcData <- reactive({
 
 output$setupTable <- DT::renderDataTable({
   sdcData()
-}, server=FALSE, escape=FALSE, rownames=FALSE, selection='none', style='bootstrap', class='table-condensed',
+}, server=FALSE, escape=FALSE, rownames=c("Variable name", "Key variables", "PRAM", "Weight", "Hierarchical identifier", "Remove"), selection='none', style='bootstrap', class='table-condensed',
 options = list(
   searching=FALSE, paging=FALSE, ordering=FALSE, bInfo=FALSE, autoWidth=FALSE,
   columnDefs=list(list(width='400px', targets = c(2))),
