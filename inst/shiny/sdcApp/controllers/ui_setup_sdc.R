@@ -671,19 +671,13 @@ output$setupbtn <- renderUI({
 output$setup_moreparams <- renderUI({
   txt_seed <- "The seed is used to initialize the random number generator used for probabilistic methods."
   txt_alpha <- "Parameter alpha is used to compute the frequencies of keys, which is used to compute risk"
-  txt_alpha <- paste(txt_alpha, "measures for categorical key variables, and is the weight with which a key that coincide based on a missing value (NA) contributes to these frequencies.")
+  txt_alpha <- paste(txt_alpha, "measures for categorical key variables. Alpha is the weight with which a key that coincides based on a missing (NA) contributes to these frequencies.")
   sl_alpha <- sliderInput("sl_alpha",
     label=h5("Parameter 'alpha'", tipify(icon("question"), title=txt_alpha, placement="top")),
     value=1, min=0, max=1, step=0.01, width="90%")
-  help_alpha <- helpText("The higher alpha, the more keys containing missing values will contribute to the calculation of 'fk' and 'Fk'")
   sl_seed <- sliderInput("sl_seed",
     label=h5("Parameter 'seed'", tipify(icon("question"), title=txt_seed, placement="top")),
     value=0, min=-250, max=250, step=1, round=FALSE, width="90%")
-  help_seed <- helpText("Select an initial (integer) value for the random seed generator")
-  out <- list(
-    fluidRow(column(6, sl_alpha, align="center"), column(6, sl_seed, align="center")),
-    fluidRow(column(6, help_alpha, align="center"), column(6, help_seed, align="center")))
-  out
 })
 
 output$ui_sdcObj_create1 <- renderUI({
@@ -732,11 +726,11 @@ output$ui_sdcObj_info <- renderUI({
     if (is.factor(inp)) {
       out <- list(out, fluidRow(
         column(12, renderPlot(plot(inp, main=NULL)), align="center")))
-      ui_nrLevs <- p("Number of levels including NA:", code(length(table(inp, useNA="always"))))
+      ui_nrLevs <- p("Number of levels including missing (NA):", code(length(table(inp, useNA="always"))))
     } else {
       out <- list(out, fluidRow(
         column(12, renderPlot(hist(inp, main=NULL)), align="center")))
-      ui_nrLevs <- p("Number of unique values including NA:", code(length(table(inp, useNA="always"))))
+      ui_nrLevs <- p("Number of unique values including missing (NA):", code(length(table(inp, useNA="always"))))
     }
 
     if (is.factor(inp)) {
@@ -755,7 +749,7 @@ output$ui_sdcObj_info <- renderUI({
 })
 
 output$sel_sdc_infovar <- renderUI({
-  selectInput("sel_infov", label=h4("Select variable to show information"), choices=allVars(), width="100%")
+  selectInput("sel_infov", label=h4("Explore variables"), choices=allVars(), width="100%")
 })
 
 output$ui_sdcObj_create <- renderUI({
