@@ -691,14 +691,15 @@ writeSafeFile <- function(obj, format, randomizeRecords, fileOut, ...) {
         new_labs[[2]] <- ll2
       }
       dat <- addVarLabels(dat, lab=new_labs)
-    #   # Convert factor variables back to labelled and add value labels
-    #   jj <- which(lapply(dat, class) %in% "factor")
-    #   for(j in jj){
-    #     # Check whether labels are numeric or missing
-    #     if(all(!is.na(as.numeric(levels(dat[!is.na(levels(dat[,j])),j]))))){
-    #     dat[,j] <- factorToLabelled(names(dat)[j], dat[j], new_labs)
-    #   }
-    # }
+      # Convert factor variables back to labelled and add value labels
+      # This ensures that both the variable values and labels are copied from the original file
+      jj <- which(lapply(dat, class) %in% "factor")
+      for(j in jj){
+        # Check whether labels are numeric or missing
+        if(all(!is.na(as.numeric(levels(dat[!is.na(levels(dat[,j])),j]))))){
+        dat[,j] <- factorToLabelled(names(dat)[j], dat[j], new_labs)
+      }
+    }
     write_dta(data=dat, path=fileOut)
   }
   if (format=="csv") {
