@@ -13,7 +13,7 @@ factorToLabelled <- function(varName, facVar, lab){
   if(!is.null(labinfo)){
     expr <- "labelled(temp, c("
     for (i in 1:length(labinfo)){
-      expr <- paste0(expr, substr(gsub(" |[[:punct:]]|[[:digit:]]", "", names(labinfo)[i]), 1, 32), " = ", labinfo[i])
+      expr <- paste0(expr, dQuote(substr(names(labinfo)[i], 1, 32)), " = ", labinfo[i])
       if(i < length(labinfo)){expr <- paste0(expr, ", ")}
     }
     expr <- paste0(expr, "))")
@@ -696,8 +696,9 @@ writeSafeFile <- function(obj, format, randomizeRecords, fileOut, ...) {
       jj <- which(lapply(dat, class) %in% "factor")
       for(j in jj){
         # Check whether labels are numeric or missing
-        if(all(!is.na(as.numeric(levels(dat[!is.na(levels(dat[,j])),j]))))){
-        dat[,j] <- factorToLabelled(names(dat)[j], dat[j], new_labs)
+        #if(all(!is.na(as.numeric(levels(dat[!is.na(levels(dat[,j])),j]))))){
+          dat[,j] <- factorToLabelled(names(dat)[j], dat[j], new_labs)
+        #}
       }
     }
     write_dta(data=dat, path=fileOut)
