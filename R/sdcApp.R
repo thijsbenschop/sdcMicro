@@ -12,6 +12,7 @@
 #' \item 'yeti'
 #' \item 'flatly'
 #' \item 'journal'
+#' \item 'IHSN'
 #' }
 #' @export
 #'
@@ -38,7 +39,7 @@ sdcApp <- function(maxRequestSize=50, debug=FALSE, theme="yeti") {
   .GlobalEnv$.startdir <- getwd()
   on.exit(rm(.startdir, envir=.GlobalEnv))
 
-  if (!theme %in% c("yeti","journal","flatly")) {
+  if (!theme %in% c("yeti","journal","flatly", "IHSN")) {
     stop("Invalid value for argument 'theme'\n")
   }
 
@@ -51,6 +52,9 @@ sdcApp <- function(maxRequestSize=50, debug=FALSE, theme="yeti") {
   }
   if (theme=="flatly") {
     .GlobalEnv$.guitheme <- "bootswatch_flatly.css"
+  }
+  if (theme=="IHSN") {
+    .GlobalEnv$.guitheme <- "ihsn.css"
   }
   on.exit(rm(.guitheme, envir=.GlobalEnv))
 
