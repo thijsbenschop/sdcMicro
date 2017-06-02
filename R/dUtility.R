@@ -93,15 +93,15 @@ dUtilityWORK <- function(x, xm, method = "IL1") {
     return(infLoss1)
   }
   if (method == "eigen") {
-    e1 <- eigen(var(scale(x), na.rm = TRUE, use = "pairwise.complete.obs"))$values
-    e2 <- eigen(var(scale(xm), na.rm = TRUE, use = "pairwise.complete.obs"))$values
-    d <- sum(abs(e1 - e2)/e1)
+    e1 <- 0 #eigen(var(scale(x), na.rm = TRUE, use = "pairwise.complete.obs"))$values
+    e2 <- 0 #eigen(var(scale(xm), na.rm = TRUE, use = "pairwise.complete.obs"))$values
+    d <- 0 #sum(abs(e1 - e2)/e1)
     return(d)
   }
   if (method == "robeigen") {
-    e1 <- eigen(covMcd(scale(x))$cov)$values
-    e2 <- eigen(covMcd(scale(xm))$cov)$values
-    d <- sum(abs(e1 - e2)/e1)
+    e1 <- 0 #eigen(covMcd(scale(x))$cov)$values
+    e2 <- 0#eigen(covMcd(scale(xm))$cov)$values
+    d <- 0#sum(abs(e1 - e2)/e1)
     return(d)
   }
 }
