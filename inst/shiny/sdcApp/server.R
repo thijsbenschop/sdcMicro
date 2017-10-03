@@ -32,12 +32,12 @@ shinyServer(function(session, input, output) {
     } else if (lang == 'Nederlands') {
       id <- which(txt == dict[,'en'])
       if(length(id) != 0){
-        return(dict[id, 'nl'])
+        return(paste0("NL ", dict[id, 'nl']))
       } else {
-        return(paste0("Geen vertaling voor '", txt, "'"))
+        return(paste0("NL Geen vertaling gevonden voor '", txt, "'"))
       }
     } else if (lang == 'Francais') {
-      return(paste0("FR French translation not implemented: ", txt))
+      return(paste0("FR French translation not available: ", txt))
       }
   }
   # Event to load dictionary in case of other language and set language options for datatable

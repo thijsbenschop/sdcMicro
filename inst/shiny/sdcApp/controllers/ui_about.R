@@ -58,7 +58,7 @@ observeEvent(input$stop_sdcApp,{
 #
 
 output$ui_about <- renderUI({
-  btn_credits <- bsButton("btn_credits", "here", style="primary", size="extra-small", class="wb-btn-inline")
+  btn_credits <- bsButton("btn_credits", translate("here"), style="primary", size="extra-small", class="wb-btn-inline")
   selLan <- selectInput("language", label=NULL, choices=c("English", "Nederlands", "Francais"),
                               selected=input$language, width="100%")
   out <- fluidRow(
@@ -67,7 +67,7 @@ output$ui_about <- renderUI({
     column(width = 8, offset = 2, p(translate("This graphical user interface of"),code("sdcMicro"),translate(" allows you to anonymize microdata even if you are not an expert in the"),
                                     code("R"),translate("programming language. Detailed information on how to use this graphical user-interface (GUI) can be found in a tutorial (a so-called vignette) that is included in the"),code("sdcMicro"),
         translate("package. The vignette is available from the"),tags$a("CRAN", href="https://cran.r-project.org/web/packages/sdcMicro/vignettes/sdcApp.html", target="_blank"), translate("website or by typing"),code('vignette("sdcApp", package="sdcMicro")'),translate("into your"),code("R"),translate("prompt."))),
-    column(width = 8, offset = 2, p("For information on the support and development of the graphical user interface, please click", btn_credits,".")),
+    column(width = 8, offset = 2, p(translate("For information on the support and development of the graphical user interface, please click"), btn_credits,".")),
     bsModal("cred_modal", title="Credits", trigger="btn_credits", uiOutput("credits"))    
   )
 
