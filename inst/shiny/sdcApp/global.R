@@ -324,6 +324,8 @@ href_to_microdata <- genDynLinkObserver(prefix="btn_a_micro_", verbose=FALSE, in
 permPfad <- reactiveValues()
 obj <- reactiveValues() # we work with this data!
 
+langInput <- 'en'
+obj$langInput <- 'en'
 #obj$pkg_status <- check_packageStatus(pkg="sdcMicro")
 
 #obj$sdcObj <- sample(1:10, 100, replace=TRUE)

@@ -25,7 +25,37 @@ shinyServer(function(session, input, output) {
       if (is.null(value)) NA else value
     }))
   }
-
+  # Function to translate strings from dictionary
+  translate <- function(txt, lang = obj$langInput) {
+    if (lang == 'English'){
+      return(paste("EN", txt))
+    } else if (lang == 'Nederlands') {
+      id <- which(txt == dict[,'en'])
+      if(length(id) != 0){
+        return(dict[id, 'nl'])
+      } else {
+        return(paste0("Geen vertaling voor '", txt, "'"))
+      }
+    } else if (lang == 'Francais') {
+      return(paste0("FR French translation not implemented: ", txt))
+      }
+  }
+  # Event to load dictionary in case of other language and set language options for datatable
+  observeEvent(input$language, {
+    obj$langInput <- input$language
+    if(input$language == 'Nederlands'){
+      options(DT.options = list(language = list(search = 'DutchFilter:')))
+      } else if(input$language == 'English'){
+        options(DT.options = list(language = list(search = 'EnglishFilter:')))
+        } else {options(DT.options = list(language = list(search = 'ThirdFilter:')))}
+  })
+  
+  # dict <- reactive({
+  #   switch(input$language,
+  #          "English" = 'en',
+  #          "Nederlands" = 'nl')
+  # })
+  
   # update pram matrix
   observe({
     curObj <- sdcObj()
@@ -1500,3 +1530,6 @@ shinyServer(function(session, input, output) {
     eval(parse(text=x))
   })
 })
+
+
+

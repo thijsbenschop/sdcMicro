@@ -11,9 +11,9 @@ output$ui_import_csv <- renderUI({
 output$ui_import_rdf <- renderUI({
   selDF <- selectInput("sel_choose_df", label=NULL, choices=available_dfs,
     selected=input$sel_choose_df, width="50%")
-  btn <- myActionButton("btn_chooose_df",label=("Load data"), "primary")
+  btn <- myActionButton("btn_chooose_df",label=translate("Load data"), "primary")
   return(fluidRow(
-    column(12, h5("Select a test dataset or any object in your current workspace", align="center")),
+    column(12, h5(translate("Select a test dataset or any object in your current workspace"), align="center")),
     column(12, div(selDF, align="center")),
     column(12, p(btn, align="center"))))
 })
@@ -63,16 +63,16 @@ output$ui_import_data_main <- renderUI({
     val <- "stata"
   }
   out <- fluidRow(
-    column(width = 12, offset = 0, h3("Uploading microdata"), class="wb-header"),
-    column(width = 12, offset = 0, p("Load the dataset to be anonymized."), class="wb-header-hint")
+    column(width = 12, offset = 0, h3(translate("Uploading microdata")), class="wb-header"),
+    column(width = 12, offset = 0, p(translate("Load the dataset to be anonymized.")), class="wb-header-hint")
   )
 
   if (val %in% c("R","csv","spss","sas","rdata","stata")) {
     # convert characters automatically to factors
-    rb1 <- radioButtons("rb_convert_c_to_f", label=h5("Convert string variables (character vectors) to factor variables?"), choices=c(TRUE, FALSE), inline=TRUE)
-    rb2 <- radioButtons("rb_drop_all_missings", label=h5("Drop variables with only missing values (NA)?"), choices=c(TRUE, FALSE), inline=TRUE)
+    rb1 <- radioButtons("rb_convert_c_to_f", label=h5(translate("Convert string variables (character vectors) to factor variables?")), choices=c(TRUE, FALSE), inline=TRUE)
+    rb2 <- radioButtons("rb_drop_all_missings", label=h5(translate("Drop variables with only missing values (NA)?")), choices=c(TRUE, FALSE), inline=TRUE)
 
-    out <- list(out, fluidRow(column(12, h5("Set additional options for the data import", align="center"))))
+    out <- list(out, fluidRow(column(12, h5(translate("Set additional options for the data import"), align="center"))))
 
     out <- list(out, fluidRow(
       column(6, rb1, align="center"),
@@ -99,11 +99,11 @@ output$ui_import_data_main <- renderUI({
     }
 
     out <- list(out, fluidRow(
-      column(12, p("Note: the selected file is loaded immediately upon selecting. Set the above options before selecting the file."), align="center")
+      column(12, p(translate("Note: the selected file is loaded immediately upon selecting. Set the above options before selecting the file.")), align="center")
     ))
 
-    fI <- fileInput("file1", h5(paste0("Select file (allowed types are '",paste0(allowed, collapse="', '"),"')")),
-      width="75%", accept=allowed)
+    fI <- fileInput("file1", h5(paste0(translate("Select file (allowed types are"), " '", paste0(allowed, collapse="', '"),"')")),
+      width="75%", accept=allowed, buttonLabel=translate("Browse..."))
     out <- list(out, fluidRow(column(12, fI, align="center")))
   } else {
     out <- list(out, uiOutput("ui_import_rdf"))
@@ -113,9 +113,9 @@ output$ui_import_data_main <- renderUI({
 
 output$ui_import_data_sidebar_left <- renderUI({
   output$ui_sel_resbtns_import <- renderUI({
-    cc <- c("Testdata/internal data", "R-dataset (.rdata)", "SPSS-file (.sav)", "SAS-file (.sasb7dat)",
-      "CSV-file (.csv, .txt)", "STATA-file (.dta)")
-    out <- fluidRow(column(12, h4("Select data source")))
+    cc <- c(paste0(translate("Testdata"), "/", translate("internal data")), paste0(translate("R-dataset"), " (.rdata)"), paste0(translate("SPSS-file"), " (.sav)"), 
+            paste0(translate("SAS-file"), " (.sas7bdat)"), paste0(translate("CSV-file"), " (.csv, .txt)"), paste0(translate("STATA-file"), " (.dta)"))
+    out <- fluidRow(column(12, h4(translate("Select data source"))))
     for (i in 1:length(cc)) {
       id <- paste0("btn_import_data_", i)
       if (obj$cur_selection_import==id) {

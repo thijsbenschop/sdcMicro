@@ -375,3 +375,15 @@ NULL
 #' head(testdata)
 #' head(testdata2)
 NULL
+
+#' Dictionary dataset for translation of Shiny application
+#'
+#'
+#' @name dictionary
+#' @docType data
+#' @format dictionary: a data frame with strings translated
+#' \describe{
+#' \item{en}{original strings in English}
+#' \item{nl}{Dutch translation}}
+#' @keywords datasets
+NULL
