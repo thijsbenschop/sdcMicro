@@ -40,13 +40,33 @@ shinyServer(function(session, input, output) {
       return(paste0("FR French translation not available: ", txt))
       }
   }
+  # Function to set language options for DT
+  # translate <- function(txt, lang = obj$langInput) {
+  #   if (lang == 'English'){
+  #     return(paste("EN", txt))
+  #   } else if (lang == 'Nederlands') {
+  #     id <- which(txt == dict[,'en'])
+  #     if(length(id) != 0){
+  #       return(paste0("NL ", dict[id, 'nl']))
+  #     } else {
+  #       return(paste0("NL Geen vertaling gevonden voor '", txt, "'"))
+  #     }
+  #   } else if (lang == 'Francais') {
+  #     return(paste0("FR French translation not available: ", txt))
+  #   }
+  # }
+  
   # Event to load dictionary in case of other language and set language options for datatable
   observeEvent(input$language, {
     obj$langInput <- input$language
     if(input$language == 'Nederlands'){
-      options(DT.options = list(language = list(search = 'DutchFilter:')))
+      options(DT.options = list(language = list(info = 'Waarnemingen _START_ tot _END_ van _TOTAL_ worden weergegeven', 
+                                                search = 'Zoek:',
+                                                paginate = list(previous = 'Terug', `next` = 'Verder'))))
       } else if(input$language == 'English'){
-        options(DT.options = list(language = list(search = 'EnglishFilter:')))
+        options(DT.options = list(language = list(language = list(info = 'Showing _START_ to _END_ of _TOTAL_ entries', 
+                                                                  search = 'Search:',
+                                                                  paginate = list(previous = 'Previous', `next` = 'Next')))))
         } else {options(DT.options = list(language = list(search = 'ThirdFilter:')))}
   })
   
