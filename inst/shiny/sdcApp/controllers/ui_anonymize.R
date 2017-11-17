@@ -13,19 +13,20 @@ choices_anon_menu <- reactive({
     "PRAM (simple)",
     "PRAM (expert)",
     "Supress values with high risks")
+  
   df2 <- data.frame(name=c_cat, group=2, header=NA, stringsAsFactors=FALSE)
-  df2$header[1] <- "Anonymize categorical variables"
+  df2$header[1] <- translate("Anonymize categorical variables")
 
   c_num <- c(
-    "Top/bottom coding",
-    "Microaggregation",
-    "Adding noise",
-    "Rank swapping")
+    translate("Top/bottom coding"),
+    translate("Microaggregation"),
+    translate("Adding noise"),
+    translate("Rank swapping"))
   if (length(get_numVars())==0) {
     c_num <- c_num[1]
   }
   df3 <- data.frame(name=c_num, group=3, header=NA, stringsAsFactors=FALSE)
-  df3$header[1] <- "Anonymize numerical variables"
+  df3$header[1] <- translate("Anonymize numerical variables")
 
   df <- rbind(df1, df2, df3)
   df
@@ -37,9 +38,9 @@ output$ui_anonymize_sidebar_left <- renderUI({
     if (is.null(sdcObj())) {
       return(NULL)
     }
-    btn_reset <- bsButton("btn_reset_sdc1", label=("Reset SDC problem"), style="warning", size="extra-small", block="TRUE")
+    btn_reset <- bsButton("btn_reset_sdc1", label=(translate("Reset SDC problem")), style="warning", size="extra-small", block="TRUE")
     fluidRow(
-      column(12, h4("Reset SDC problem"), align="center"),
+      column(12, h4(translate("Reset SDC problem")), align="center"),
       column(12, btn_reset))
   })
   output$ui_sel_anon_btns <- renderUI({
@@ -117,8 +118,8 @@ output$ui_main_anon <- renderUI({
 output$ui_anonymize_noproblem <- renderUI({
   return(list(
     noInputData(uri="ui_anonymize"),
-    fluidRow(column(12, tags$br(), p("or go back to the Undo tab and upload a previously saved problem instance"), align="center")),
-    fluidRow(column(12, myActionButton("nodata_anonymize_uploadproblem", label="Upload a previously saved problem", btn.style="primary"), align="center"))
+    fluidRow(column(12, tags$br(), p(translate("or go back to the Undo tab and upload a previously saved problem instance")), align="center")),
+    fluidRow(column(12, myActionButton("nodata_anonymize_uploadproblem", label=translate("Upload a previously saved problem"), btn.style="primary"), align="center"))
   ))
 })
 output$ui_anonymize_summary <- renderUI({

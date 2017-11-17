@@ -1,27 +1,27 @@
 # UI-output for recoding a variable to a numeric variable
 output$ui_modify_recode_to_numeric <- renderUI({
   output$ui_to_num_var <- renderUI({
-    selectInput("sel_to_num_var",label=h5("Choose variable(s)"), choices=vv, width="50%", multiple=TRUE)
+    selectInput("sel_to_num_var",label=h5(translate("Choose variable(s)")), choices=vv, width="50%", multiple=TRUE)
   })
   output$ui_to_num_btn <- renderUI({
     req(input$sel_to_num_var)
     if (length(input$sel_to_num_var)>0) {
-      return(myActionButton("btn_recode_to_numeric",label=("Recode to numeric"), "primary"))
+      return(myActionButton("btn_recode_to_numeric",label=(translate("Recode to numeric")), "primary"))
     }
   })
   vv <- c(facVars(), charVars())
   if (length(vv) == 0) {
     return(fluidRow(
-      column(12, h4("No factor variables available in the inputdata!", align="center")),
-      column(12, h4("There are no variables in the input data that could be converted to numeric variables.", align="center"))
+      column(12, h4(translate("No factor variables available in the inputdata!"), align="center")),
+      column(12, h4(translate("There are no variables in the input data that could be converted to numeric variables."), align="center"))
     ))
   }
 
-  helptxt <- "Numerical key variables have to be of type 'numeric' or type 'integer'. Variables of type 'character' or type 'factor' need to be converted"
-  helptxt <- paste(helptxt, "to type 'numeric' before selecting these as numerical key variables. Here you can convert variables of type 'character' and")
-  helptxt <- paste(helptxt, "type 'factor' to type 'numeric'.")
+  helptxt <- translate("Numerical key variables have to be of type 'numeric' or type 'integer'. Variables of type 'character' or type 'factor' need to be converted")
+  helptxt <- paste(helptxt, translate("to type 'numeric' before selecting these as numerical key variables. Here you can convert variables of type 'character' and"))
+  helptxt <- paste(helptxt, translate("type 'factor' to type 'numeric'."))
   out <- fluidRow(
-    column(width = 12, offset = 0, h3("Convert character/factor variables to numeric variables"), class="wb-header"),
+    column(width = 12, offset = 0, h3(translate("Convert character/factor variables to numeric variables")), class="wb-header"),
     column(width = 12, offset = 0, p(helptxt), class="wb-header-hint"),
     column(12, uiOutput("ui_to_num_var"), align="center"),
     column(12, uiOutput("ui_to_num_btn"), align="center"))
@@ -54,7 +54,7 @@ output$ui_modify_recode_to_factor <- renderUI({
     if (is.null(input$sel_algo)){
       return(NULL)
     }
-    return(numericInput("sl_number_breaks",label=h5("Specify number of intervals"), value=3, min=2, max=20, step=1))
+    return(numericInput("sl_number_breaks",label=h5(translate("Specify number of intervals")), value=3, min=2, max=20, step=1))
   })
   output$ui_globalRecode_manual <- renderUI({
     if (is.null(input$sel_algo)){
@@ -62,8 +62,8 @@ output$ui_modify_recode_to_factor <- renderUI({
     }
     sel_br <- customTextInput("txt_custom_breaks",label=h5("Specify custom breaks"), value=input$txt_custom_breaks)
     help_br <- helpText(
-      "Example input: 1,3,5,9 splits the variable into the 3 groups (1,3],(3,5] and (5,9].", br(),
-      "If you supply 1 number (e.g. 3), the variable will be split in 3 equally sized groups.")
+      translate("Example input: 1,3,5,9 splits the variable into the 3 groups (1,3],(3,5] and (5,9]."), br(),
+      translate("If you supply 1 number (e.g. 3), the variable will be split in 3 equally sized groups."))
     list(sel_br, tags$br(), help_br)
   })
   output$ui_globalRecode_custom <- renderUI({
@@ -83,13 +83,13 @@ output$ui_modify_recode_to_factor <- renderUI({
     vv <- numVars()
     mult <- FALSE
     if (!is.null(input$sel_custom_split) && input$sel_custom_split=="no") {
-      selectInput("sel_num_glrec", label=h5("Choose numeric variable(s)"), choices=vv, multiple=TRUE)
+      selectInput("sel_num_glrec", label=h5(translate("Choose numeric variable(s)")), choices=vv, multiple=TRUE)
     } else {
-      radioButtons("rb_num_glrec", label=h5("Choose a numeric variable"), choices=vv, selected=input$rb_num_glrec)
+      radioButtons("rb_num_glrec", label=h5(translate("Choose a numeric variable")), choices=vv, selected=input$rb_num_glrec)
     }
   })
   output$ui_globalRecode_split <- renderUI({
-    radioButtons("sel_custom_split",label=h5("Use custom breaks?"), choices=c("no","yes"),
+    radioButtons("sel_custom_split",label=h5(translate("Use custom breaks?")), choices=c("no","yes"),
       selected=input$sel_custom_split, inline=TRUE, width="100%")
   })
   output$ui_globalRecode_cutalgo <- renderUI({
@@ -132,11 +132,11 @@ output$ui_modify_recode_to_factor <- renderUI({
         res <- suppressWarnings(as.numeric(unlist(strsplit(inp, ","))))
         if (sum(is.na(res))>0) {
           return(fluidRow(
-            column(12, myActionButton("btn_recode_to_factor_notworking",label=("Error: Please check your input (non-numeric?)"), "danger"), align="center")
+            column(12, myActionButton("btn_recode_to_factor_notworking",label=(translate("Error: Please check your input (non-numeric?)")), "danger"), align="center")
           ))
         } else if (length(res)==1 && res > nrow(obj$inputdata)) {
           return(fluidRow(
-            column(12, myActionButton("btn_recode_to_factor_notworking",label=("Error: The number of groups is too large!"), "danger"), align="center")
+            column(12, myActionButton("btn_recode_to_factor_notworking",label=(translate("Error: The number of groups is too large!")), "danger"), align="center")
           ))
         } else {
           return(btn_rec)
@@ -156,17 +156,17 @@ output$ui_modify_recode_to_factor <- renderUI({
   vv <- numVars()
   if (length(vv) == 0) {
     return(fluidRow(
-      column(12, h4("No numeric variables available in the inputdata!", align="center"))
+      column(12, h4(translate("No numeric variables available in the inputdata!"), align="center"))
     ))
   }
 
-  helptxt <- "Categorical key variables have to be of type 'factor' or type 'integer'.  Variables of type 'numeric' need to be converted to type 'factor'"
-  helptxt <- paste(helptxt,"selecting these as categorical key variables. Here you can convert variables of type 'numeric' to type 'factor'.")
-  helptxt <- paste(helptxt, "Each unique value is converted to a separate category (factor level). In case several values in the numeric variable should")
-  helptxt <- paste(helptxt, "be combined into one factor level, customized breaks can be specified. Several algorithms are available to customize the breaks.")
+  helptxt <- translate("Categorical key variables have to be of type 'factor' or type 'integer'.  Variables of type 'numeric' need to be converted to type 'factor'")
+  helptxt <- paste(helptxt,translate("selecting these as categorical key variables. Here you can convert variables of type 'numeric' to type 'factor'."))
+  helptxt <- paste(helptxt, translate("Each unique value is converted to a separate category (factor level). In case several values in the numeric variable should"))
+  helptxt <- paste(helptxt, translate("be combined into one factor level, customized breaks can be specified. Several algorithms are available to customize the breaks."))
 
   out <- fluidRow(
-    column(width = 12, offset = 0, h3("Convert numeric to factor"), class="wb-header"),
+    column(width = 12, offset = 0, h3(translate("Convert numeric to factor")), class="wb-header"),
     column(width = 12, offset = 0, p(helptxt), class="wb-header-hint")
   )
 
@@ -228,20 +228,20 @@ output$ui_modify_change_factor <- renderUI({
     selectInput("sel_factor", label=h5("Choose factor variable"), choices=vv, selected=input$sel_factor, width="50%")
   })
   output$reclocfac_levs <- renderUI({
-    selectInput("cbg_factor", label=h5("Select Levels to recode/combine"),
+    selectInput("cbg_factor", label=h5(translate("Select Levels to recode/combine")),
       multiple=TRUE, selectize=TRUE, choices=curFactorVals(), width="100%")
   })
   output$reclocfac_addna <- renderUI({
     req(input$cbg_factor)
-    radioButtons("rb_micro_addna", h5("Add missing values to new factor level?"), choices=c("no", "yes"), inline=TRUE)
+    radioButtons("rb_micro_addna", h5(translate("Add missing values to new factor level?")), choices=c("no", "yes"), inline=TRUE)
   })
   output$reclocfac_btn <- renderUI({
     req(input$cbg_factor)
-    myActionButton("btn_update_factor", label="Group factor levels", "primary")
+    myActionButton("btn_update_factor", label=translate("Group factor levels"), "primary")
   })
   output$reclocfac_txtval <- renderUI({
     req(input$cbg_factor)
-    txtval <- textInput("inp_newlevname", label=h5("New label for recoded values"),
+    txtval <- textInput("inp_newlevname", label=h5(translate("New label for recoded values")),
       value=paste0(input$cbg_factor, collapse="_"), width="100%")
   })
 
@@ -249,16 +249,16 @@ output$ui_modify_change_factor <- renderUI({
   # out <- fluidRow(
   #   column(12, h3("Group factor levels in factor variables in original data"), class="wb-header")
   #   )
-  out <- column(12, h3("Group factor levels in factor variables in original data"), class="wb-header")
+  out <- column(12, h3(translate("Group factor levels in factor variables in original data")), class="wb-header")
 
   if (length(facVars())==0) {
     out <- list(out, fluidRow(
-      column(12, h5("There are no factor variables available that could be recoded!", align="center"))
+      column(12, h5(translate("There are no factor variables available that could be recoded!"), align="center"))
     ))
     return(out)
   }
 
-  helptxt <- p("Here you can group/combine the factor levels of categorical variables of type 'factor' before setting up the sdcMicro object.")
+  helptxt <- p(translate("Here you can group/combine the factor levels of categorical variables of type 'factor' before setting up the sdcMicro object."))
   out <- fluidRow(out, column(12, helptxt, class="wb-header-hint"))
   out <- list(out, fluidRow(
     column(12, uiOutput("reclocfac_var"), align="center")))
@@ -277,7 +277,7 @@ output$ui_modify_change_factor <- renderUI({
 # UI-output to create a stratification variable
 output$ui_modify_create_stratvar <- renderUI({
   output$sel_genstrata <- renderUI({
-    selectInput("sel_allvars_strata",label=h5("Select variables to generate a stratification variable"), multiple=TRUE,
+    selectInput("sel_allvars_strata",label=h5(translate("Select variables to generate a stratification variable")), multiple=TRUE,
       choices=allVars(), width="100%")
   })
   output$vname_genstrata <- renderUI({
@@ -285,7 +285,7 @@ output$ui_modify_create_stratvar <- renderUI({
     if (length(input$sel_allvars_strata) < 2) {
       return(NULL)
     }
-    textInput("inp_vname_strata", label=h5("Specify variable name for stratification variable"), value=paste0(input$sel_allvars_strata, collapse="_"), width="100%")
+    textInput("inp_vname_strata", label=h5(translate("Specify variable name for stratification variable")), value=paste0(input$sel_allvars_strata, collapse="_"), width="100%")
   })
   output$btn_genstrata <- renderUI({
     req(input$sel_allvars_strata, input$inp_vname_strata)
@@ -295,16 +295,16 @@ output$ui_modify_create_stratvar <- renderUI({
     if (input$inp_vname_strata %in% colnames(inputdata())) {
       return(NULL)
     }
-    fluidRow(column(12, myActionButton("btn_create_stratavar", label=("Create stratification variable"), "primary"), align="center"))
+    fluidRow(column(12, myActionButton("btn_create_stratavar", label=(translate("Create stratification variable")), "primary"), align="center"))
   })
 
-  helptxt <- "Many SDC methods can be applied within strata. Here you can generate a new stratification variable by chaining together values of two or more"
-  helptxt <- paste(helptxt, "variables. The number of strata is the product of the number of factor levels in the selected variables. For instance by choosing")
-  helptxt <- paste(helptxt, "gender (male, female) and region (region 1, region 2), 4 strata are generated (male - region 1, male - region 2, female - region 1, female - region 2).")
-  helptxt <- paste(helptxt, "By default the variable name of the stratification variable consists of the variable names separated by  '_' . You can also specify")
-  helptxt <- paste(helptxt, "the variable name by typing it into the text field. The new variable is added to the loaded micro data set and will be exported.")
+  helptxt <- translate("Many SDC methods can be applied within strata. Here you can generate a new stratification variable by chaining together values of two or more")
+  helptxt <- paste(helptxt, translate("variables. The number of strata is the product of the number of factor levels in the selected variables. For instance by choosing"))
+  helptxt <- paste(helptxt, translate("gender (male, female) and region (region 1, region 2), 4 strata are generated (male - region 1, male - region 2, female - region 1, female - region 2)."))
+  helptxt <- paste(helptxt, translate("By default the variable name of the stratification variable consists of the variable names separated by  '_' . You can also specify"))
+  helptxt <- paste(helptxt, translate("the variable name by typing it into the text field. The new variable is added to the loaded micro data set and will be exported."))
   out <- fluidRow(
-    column(width = 12, offset = 0, h3("Create a stratification variable"), class="wb-header"),
+    column(width = 12, offset = 0, h3(translate("Create a stratification variable")), class="wb-header"),
     column(width = 12, offset = 0, p(helptxt), class="wb-header-hint")
   )
 
@@ -318,7 +318,7 @@ output$ui_modify_create_stratvar <- renderUI({
 # UI-output to set specific values to NA
 output$ui_set_to_na <- renderUI({
   output$ui_nasupptype <- renderUI({
-    radioButtons("set_to_na_type", label=h5("How to select values to recode to NA?"),
+    radioButtons("set_to_na_type", label=h5(translate("How to select values to recode to NA?")),
       choices=c("by value"="rule", "by record ID"="id"), inline=TRUE)
   })
   output$tab_inputdata_setna <- renderDataTable({
@@ -338,15 +338,15 @@ output$ui_set_to_na <- renderUI({
   output$ui_nasuppid <- renderUI({
     req(input$sel_na_suppvar, input$set_to_na_type)
     if (input$set_to_na_type=="id") {
-      res <- numericInput("num_na_suppid", label=h5("Select record ID"), value=1, min=1, max=nrow(obj$inputdata))
+      res <- numericInput("num_na_suppid", label=h5(translate("Select record ID")), value=1, min=1, max=nrow(obj$inputdata))
     } else {
-      res <- selectInput("num_na_suppid", label=h5("Select value to recode to NA"), multiple=FALSE, choices=sort(unique(obj$inputdata[[input$sel_na_suppvar]])))
+      res <- selectInput("num_na_suppid", label=h5(translate("Select value to recode to NA")), multiple=FALSE, choices=sort(unique(obj$inputdata[[input$sel_na_suppvar]])))
     }
     return(res)
   })
   output$ui_ansuppbtn <- renderUI({
     req(input$sel_na_suppvar, input$num_na_suppid, input$set_to_na_type)
-    btn <- myActionButton("btn_set_to_na",label=("Set values to NA"), "primary")
+    btn <- myActionButton("btn_set_to_na",label=(translate("Set values to NA")), "primary")
     if (input$set_to_na_type=="rule") {
       return(btn)
     }
@@ -365,13 +365,13 @@ output$ui_set_to_na <- renderUI({
     return(btn)
   })
 
-  helptxt <- paste0("The loaded dataset may contain different missing value codes, such as",code(9),",",code(999),",",code(-9),", etc. ")
-  helptxt <- paste0(helptxt, "sdcMicro can only interpret missing values that are coded",code("NA"),". Here you can set other missing value")
-  helptxt <- paste0(helptxt, "codes to",code("NA"),"(by missing value code). All records with that value in the variable will be recoded to NA. Alternatively one can set individual cells to",code("NA"),"by selecting the variable and record id (by record ID).")
-  helptxt <- paste0(helptxt, " Note that it impossible to later retrieve the original missing values. R does not allow for distinct missing value codes.")
+  helptxt <- paste0(translate("The loaded dataset may contain different missing value codes, such as"),code(9),",",code(999),",",code(-9),translate(", etc. "))
+  helptxt <- paste0(helptxt, translate("sdcMicro can only interpret missing values that are coded"),code("NA"),translate(". Here you can set other missing value"))
+  helptxt <- paste0(helptxt, translate("codes to"),code("NA"),translate("(by missing value code). All records with that value in the variable will be recoded to NA. Alternatively one can set individual cells to",code("NA"),"by selecting the variable and record id (by record ID)."))
+  helptxt <- paste0(helptxt, translate(" Note that it impossible to later retrieve the original missing values. R does not allow for distinct missing value codes."))
 
   out <- fluidRow(
-    column(width = 12, offset = 0, h3("Set missing values to NA"), class="wb-header"),
+    column(width = 12, offset = 0, h3(translate("Set missing values to NA")), class="wb-header"),
     column(width = 12, offset = 0, p(HTML(helptxt)), class="wb-header-hint"),
     column(12, uiOutput("ui_nasupptype"), align="center")
   )
@@ -390,7 +390,7 @@ output$ui_set_to_na <- renderUI({
 # on the class of the variable
 output$ui_view_var <- renderUI({
   output$ui_selvar1 <- renderUI({
-    selectInput("view_selvar1", choices=allVars(), label=h5("Choose a variable"), multiple=FALSE, selected=obj$inp_sel_viewvar1, width="100%")
+    selectInput("view_selvar1", choices=allVars(), label=h5(translate("Choose a variable")), multiple=FALSE, selected=obj$inp_sel_viewvar1, width="100%")
   })
   # This is required so that usual changes of the dropdown-select are also reflected in the reactive variable obj$inp_sel_viewvar1
   observeEvent(input$view_selvar1, {
@@ -398,7 +398,7 @@ output$ui_view_var <- renderUI({
   })
   output$ui_selvar2 <- renderUI({
     vv <- setdiff(allVars(), input$inp_sel_viewvar1)
-    selectInput("view_selvar2", choices=c("none", vv), label=h5("Choose a second variable (optional)"), multiple=FALSE, width="100%")
+    selectInput("view_selvar2", choices=c("none", vv), label=h5(translate("Choose a second variable (optional)")), multiple=FALSE, width="100%")
   })
 
   observeEvent(input$view_selvar1, {
@@ -487,10 +487,10 @@ output$ui_view_var <- renderUI({
       out <- list(out, fluidRow(column(12, renderTable(res$tab, include.rownames=FALSE), align="center")))
     } else {
       out <- list(out, fluidRow(
-        column(12, h5(HTML(paste("Correlation between",code(res$vars[1]),"and",code(res$vars[2]),":",code(res$vcor))), align="center")),
-        column(12, h5(HTML(paste("Summary of Variable",code(res$vars[1]))), align="center")),
+        column(12, h5(HTML(paste(translate("Correlation between"),code(res$vars[1]),translate("and"),code(res$vars[2]),":",code(res$vcor))), align="center")),
+        column(12, h5(HTML(paste(translate("Summary of variable"),code(res$vars[1]))), align="center")),
         column(12, renderTable(res$tab1, include.rownames=FALSE), align="center"),
-        column(12, h5(HTML(paste("Summary of Variable",code(res$vars[2]))), align="center")),
+        column(12, h5(HTML(paste(translate("Summary of variable"),code(res$vars[2]))), align="center")),
         column(12, renderTable(res$tab2, include.rownames=FALSE), align="center")))
     }
 
@@ -498,10 +498,10 @@ output$ui_view_var <- renderUI({
     nainfo$nr_na <- as.integer(unlist(lapply(df, function(x) { sum(is.na(x)) })))
     nainfo$perc_na <- formatC(100*(nainfo$nr_na/nrow(df)), format="f", digits=2)
     out <- list(out,
-      fluidRow(column(12, "Variable",code(nainfo$variable[1]),"has",code(nainfo$nr_na[1]),"(",code(paste0(nainfo$perc_na[1],"%")),") missing values.", align="center")))
+      fluidRow(column(12, translate("Variable"),code(nainfo$variable[1]),translate("has"),code(nainfo$nr_na[1]),"(",code(paste0(nainfo$perc_na[1],"%")),translate(") missing values."), align="center")))
     if (nrow(nainfo)==2 & nainfo$variable[2]!="none") {
       out <- list(out,
-        fluidRow(column(12, "Variable",code(nainfo$variable[2]),"has",code(nainfo$nr_na[2]),"(",code(paste0(nainfo$perc_na[2],"%")),") missing values.", align="center")))
+        fluidRow(column(12, translate("Variable"),code(nainfo$variable[2]),translate("has"),code(nainfo$nr_na[2]),"(",code(paste0(nainfo$perc_na[2],"%")),translate(") missing values."), align="center")))
     }
     out
   })
@@ -556,7 +556,7 @@ output$ui_view_var <- renderUI({
   rb <- radioButtons("view_rbchoice", choices=c("Plot","Summary"), selected=input$view_rbchoice, label=h5("What should be displayed?"), inline=TRUE, width="100%")
 
   out <- list(out, fluidRow(
-    column(width = 12, offset = 0, p("Help or description text."), class="wb-header-hint"),
+    column(width = 12, offset = 0, p(translate("Help or description text.")), class="wb-header-hint"),
     column(6, uiOutput("ui_selvar1")),
     column(6, uiOutput("ui_selvar2"))))
 
@@ -570,20 +570,20 @@ output$ui_view_var <- renderUI({
 # UI-output to reset a variable to its original state
 output$ui_reset_var <- renderUI({
   output$reset_microvar_var <- renderUI({
-    selectInput("sel_reset_microvars", label=h5("Choose variable(s) to reset"),
+    selectInput("sel_reset_microvars", label=h5(translate("Choose variable(s) to reset")),
       choices=allVars(), multiple=TRUE, width="50%")
   })
 
   output$reset_microvar_btn <- renderUI({
     req(input$sel_reset_microvars)
-    myActionButton("btn_resetmicrovar",label="Reset selected variable(s) to their original state", "primary")
+    myActionButton("btn_resetmicrovar",label=translate("Reset selected variable(s) to their original state"), "primary")
   })
 
-  txt_reset <- "Here you can undo any modifications to variables made after loading the dataset into the GUI."
-  txt_reset <- paste(txt_reset, "Resetting restores the variable to its original state and cancels any modifications.")
+  txt_reset <- translate("Here you can undo any modifications to variables made after loading the dataset into the GUI.")
+  txt_reset <- paste(txt_reset, translate("Resetting restores the variable to its original state and cancels any modifications."))
   list(
     fluidRow(
-      column(width = 12, offset = 0, h3("Reset variables"), class="wb-header"),
+      column(width = 12, offset = 0, h3(translate("Reset variables")), class="wb-header"),
       column(width = 12, offset = 0, p(txt_reset), class="wb-header-hint"),
       column(12, uiOutput("reset_microvar_var"), align="center"),
       column(12, uiOutput("reset_microvar_btn"), align="center")
@@ -604,16 +604,16 @@ output$ui_show_microdata <- renderUI({
   })
 
   #txt_microdata <- paste0("In this tab you can manipulate the data to prepare for setting up an object of class",code("sdcMicroObj"),"in the Anonymize tab. ")
-  txt_microdata <- paste0("The loaded dataset is",code(obj$microfilename),"and consists of",code(nrow(obj$inputdata)),"observations and ",code(ncol(obj$inputdata)),"variables. ")
+  txt_microdata <- paste0(translate("The loaded dataset is"),code(obj$microfilename),translate("and consists of"),code(nrow(obj$inputdata)),translate("observations and "),code(ncol(obj$inputdata)),translate("variables. "))
   if(is.null(attr(obj$inputdata, "dropped"))){
-    txt_microdata <- paste0(txt_microdata, "No variables were dropped because of all missing values.")
+    txt_microdata <- paste0(txt_microdata, translate("No variables were dropped because of all missing values."))
   }else{
-    txt_microdata <- paste0(txt_microdata, code(length(attr(obj$inputdata, "dropped"))), "variable(s) was/were dropped because of all missing values: ")
+    txt_microdata <- paste0(txt_microdata, code(length(attr(obj$inputdata, "dropped"))), translate("variable(s) was/were dropped because of all missing values: "))
     #lapply(attr(obj$inputdata, "dropped"), function(x) {txt_microdata <- paste0(txt_microdata, x)})
     #attr(obj$inputdata, "dropped")
   }
   out <- fluidRow(
-    column(width = 12, offset = 0, h3("Loaded microdata")), class="wb-header")
+    column(width = 12, offset = 0, h3(translate("Loaded microdata"))), class="wb-header")
   if(is.null(attr(obj$inputdata, "dropped"))){
     out <- list(out, fluidRow(
       column(width = 12, offset = 0, p(HTML(txt_microdata))), class="wb-header-hint"))
@@ -653,7 +653,7 @@ output$ui_sample_microdata <- renderUI({
       sl_from <- 1
       sl_to <- nrow(obj$inputdata)
     }
-    sl1 <- sliderInput("sel_sdcP_sample_n", label=h5("Set 'n' for the selected method"),
+    sl1 <- sliderInput("sel_sdcP_sample_n", label=h5(translate("Set 'n' for the selected method")),
       value=sl_val, min=sl_from, max=sl_to, step=1, width="100%")
   } else {
     sl1 <- NULL
@@ -661,12 +661,12 @@ output$ui_sample_microdata <- renderUI({
 
   btn <- myActionButton("btn_sample_microdata", label="Create subset", btn.style="primary")
 
-  txt_subset <- "For testing purposes, you can here reduce the number of records in the dataset by selecting a subset."
-  txt_subset <- paste(txt_subset, "This reduces the computation time of several anonymization methods.")
-  txt_subset <- paste(txt_subset, "Note: This is solely for testing purposes to reduce the computation time and not an anonymization method. To produce an anonymized dataset this should not be used.")
+  txt_subset <- translate("For testing purposes, you can here reduce the number of records in the dataset by selecting a subset.")
+  txt_subset <- paste(txt_subset, translate("This reduces the computation time of several anonymization methods."))
+  txt_subset <- paste(txt_subset, translate("Note: This is solely for testing purposes to reduce the computation time and not an anonymization method. To produce an anonymized dataset this should not be used."))
 
   out <- fluidRow(
-    column(12, h3("Use only a subset of the dataset"), class="wb-header"),
+    column(12, h3(translate("Use only a subset of the dataset")), class="wb-header"),
     column(width = 12, offset = 0, p(txt_subset), class="wb-header-hint"))
   out <- list(out, fluidRow(
     column(6, p(sel1, align="center")),
@@ -683,17 +683,17 @@ output$ui_hierarchical_data_prep <- renderUI({
       return(NULL)
     }
     if (length(input$sel_hhvars)>0) {
-      return(myActionButton("btn_hier_data_prep", label="Create household-input data", btn.style="primary"))
+      return(myActionButton("btn_hier_data_prep", label=translate("Create household-input data"), btn.style="primary"))
     }
     return(invisible(NULL))
   })
   output$sel_hhvars_id <- renderUI({
-    selectInput("sel_hhvars_id", label=h5("Select the household id variable"),
+    selectInput("sel_hhvars_id", label=h5(translate("Select the household id variable")),
       choices=c("",allVars()), multiple=FALSE, width="75%")
   })
   output$sel_hhvars <- renderUI({
     req(input$sel_hhvars_id)
-    selectInput("sel_hhvars", label=h5("Please select all variables that refer to households and not to individuals"),
+    selectInput("sel_hhvars", label=h5(translate("Please select all variables that refer to households and not to individuals")),
       choices=setdiff(allVars(), input$sel_hhvars_id), multiple=TRUE, width="75%")
   })
   if (obj$hhdata_selected==TRUE) {
@@ -703,24 +703,24 @@ output$ui_hierarchical_data_prep <- renderUI({
       "type"=dataTypes())
     return(
       fluidRow(
-        column(width = 10, offset = 1, h4("Note"), align="center"),
-        column(width = 10, offset = 1, p("The current input data have already been modified to be used as household-level data. The data
-          set contains",code(nrow(inputdata())),"observations in the following",code(ncol(inputdata())),"variables."), align="center"),
+        column(width = 10, offset = 1, h4(translate("Note")), align="center"),
+        column(width = 10, offset = 1, p(translate("The current input data have already been modified to be used as household-level data. The data
+          set contains"),code(nrow(inputdata())),translate("observations in the following"),code(ncol(inputdata())),translate("variables.")), align="center"),
         column(width = 10, offset = 1, renderTable(df), align="center"),
-        column(width = 10, offset = 1, p("If you want to work on individual-level data, you will have to delete the entire microdata file and start from scratch"), align="center")
+        column(width = 10, offset = 1, p(translate("If you want to work on individual-level data, you will have to delete the entire microdata file and start from scratch")), align="center")
       ))
   }
 
-  out <- list(fluidRow(column(12, h4("Prepare household-level data"), align="center")))
+  out <- list(fluidRow(column(12, h4(translate("Prepare household-level data")), align="center")))
 
   if (!is.null(lastError())) {
     out <- list(out, fluidRow(
-      column(width = 10, offset = 1, h4("The following Error has occured!", align="center")),
+      column(width = 10, offset = 1, h4(translate("The following error has occured!"), align="center")),
       column(width = 10, offset = 1, code(lastError()), align="center")))
   }
 
-  helptxt <- "One record per household is selected and all variables that do not pertain to the household level are removed. Do not forget to select"
-  helptxt <- paste(helptxt, "a variable containing household sampling weights (if available). When setting up an sdcProblem, it is important to use correct sampling weights!")
+  helptxt <- translate("One record per household is selected and all variables that do not pertain to the household level are removed. Do not forget to select")
+  helptxt <- paste(helptxt, translate("a variable containing household sampling weights (if available). When setting up an sdcProblem, it is important to use correct sampling weights!"))
 
   out <- list(out, fluidRow(
     column(width = 10, offset = 1, p(helptxt), align="center"),
@@ -739,14 +739,14 @@ observeEvent(input$sel_hhvars, {
 
 output$ui_hierarchical_data_merge <- renderUI({
   output$sel_hhid_merge <- renderUI({
-    selectInput("sel_hhid_hhdata", label=h5("Select a variable containing household ids"), choices=intersect(colnames(obj$hhdata), colnames(inputdata())),
+    selectInput("sel_hhid_hhdata", label=h5(translate("Select a variable containing household ids")), choices=intersect(colnames(obj$hhdata), colnames(inputdata())),
       selected=input$sel_hhid_hhdata)
   })
   output$btn_reset_hhdata <- renderUI({
-    myActionButton("reset_hhdata", label="Reset uploaded household-level data", btn.style="danger")
+    myActionButton("reset_hhdata", label=translate("Reset uploaded household-level data"), btn.style="danger")
   })
   output$btn_merge_hhdata <- renderUI({
-    myActionButton("btn_merge_hhdata", label="Merge household- and individual level data", btn.style="primary")
+    myActionButton("btn_merge_hhdata", label=translate("Merge household- and individual level data"), btn.style="primary")
   })
 
   if (obj$hhdata_applied==TRUE) {
@@ -756,44 +756,44 @@ output$ui_hierarchical_data_merge <- renderUI({
       "type"=dataTypes())
     return(
       fluidRow(
-        column(width = 10, offset = 1, h4("Merging of files was successful"), align="center"),
-        column(width = 10, offset = 1, p("The (anonymized) household-level data were merged into the input dataset"), align="center"),
-        column(width = 10, offset = 1, p("The data set contains",code(nrow(inputdata())),"observations in the following",code(ncol(inputdata())),"variables."), align="center"),
+        column(width = 10, offset = 1, h4(translate("Merging of files was successful")), align="center"),
+        column(width = 10, offset = 1, p(translate("The (anonymized) household-level data were merged into the input dataset")), align="center"),
+        column(width = 10, offset = 1, p(translate("The data set contains",code(nrow(inputdata())),translate("observations in the following")),code(ncol(inputdata())),translate("variables.")), align="center"),
         column(width = 10, offset = 1, renderTable(df), align="center"),
-        column(width = 10, offset = 1, p("In order to merge a different household level dataset, it is necessary to remove and reload the loaded microdata."), align="center")
+        column(width = 10, offset = 1, p(translate("In order to merge a different household level dataset, it is necessary to remove and reload the loaded microdata.")), align="center")
     ))
   }
 
   if (obj$hhdata_selected==TRUE) {
     return(
       fluidRow(
-        column(width = 10, offset = 1, h4("Note"), align="center"),
-        column(width = 10, offset = 1, p("The current input data have been modified to be used as household-level data.
-          It is therefore not possible, to merge additional household-level data to the current inputdata."), align="center"),
-            column(12, p("To do so, you will have to delete the entire microdata file and start from scratch"), align="center")
+        column(width = 10, offset = 1, h4(translate("Note")), align="center"),
+        column(width = 10, offset = 1, p(translate("The current input data have been modified to be used as household-level data.
+          It is therefore not possible, to merge additional household-level data to the current inputdata.")), align="center"),
+            column(12, p(translate("To do so, you will have to delete the entire microdata file and start from scratch")), align="center")
       ))
   }
 
-  out <- list(fluidRow(column(12, h4("Merge Data"), align="center")))
+  out <- list(fluidRow(column(12, h4(translate("Merge data")), align="center")))
   if (!is.null(lastError())) {
     out <- list(out, fluidRow(
-      column(12, h4("The following error has occured!", align="center")),
+      column(12, h4(translate("The following error has occured!"), align="center")),
       column(12, code(lastError()), align="center")))
   }
   if (!is.null(obj$hhdata)) {
     out <- list(out, fluidRow(
-      column(width = 8, offset = 2, p("You can reset the uploaded data by clicking the button below."), align="center"),
+      column(width = 8, offset = 2, p(translate("You can reset the uploaded data by clicking the button below.")), align="center"),
       column(12, uiOutput("btn_reset_hhdata"), align="center"),
-      column(width = 8, offset = 2, h4("Continue with the merge"), align="center"),
-      column(width = 8, offset = 2, p("You can now continue to merge the current household level data to the individual level microdata."), align="center"),
+      column(width = 8, offset = 2, h4(translate("Continue with the merge")), align="center"),
+      column(width = 8, offset = 2, p(translate("You can now continue to merge the current household level data to the individual level microdata.")), align="center"),
       column(12, uiOutput("sel_hhid_merge"), align="center"),
       column(12, uiOutput("btn_merge_hhdata"), align="center")
     ))
   } else {
     out <- list(out, fluidRow(
-      column(width = 8, offset = 2, p("You can now read in an already exported and anonymized household-level file to replace the household level variables in the raw dataset you read in the next step."), align="center"),
-      column(width = 8, offset = 2, p("Note: the selected file is loaded immediately. Set options before selecting the file."), align="center"),
-      column(12, fileInput("file_hhfile", h5(paste0("Select File (allowed types are '.rdata')")), width="50%", accept=".rdata"), align="center")))
+      column(width = 8, offset = 2, p(translate("You can now read in an already exported and anonymized household-level file to replace the household level variables in the raw dataset you read in the next step.")), align="center"),
+      column(width = 8, offset = 2, p(translate("Note: the selected file is loaded immediately. Set options before selecting the file.")), align="center"),
+      column(12, fileInput("file_hhfile", h5(paste0(translate("Select File (allowed types are '.rdata')"))), width="50%", accept=".rdata"), align="center")))
   }
   out
 })
@@ -803,14 +803,14 @@ output$ui_hierarchical_data <- renderUI({
     choices=c("Prepare file for the anonymization of household level variables"="prep_data", "Merge an anonymized household level file into the full dataset"="merge_hhdata"),
     selected=input$rb_hierdata_selection, inline=TRUE)
 
-  helptxt <- "Often microdata files incur a hierarchical structure, such as a household structure. In such cases the anonymization process consists of two steps: "
-  helptxt <- paste0(helptxt, tags$br(), "1) the anonymization of the higher level records and variables (household file) and ")
-  helptxt <- paste0(helptxt, "2) the anonymization of the complete file with the anonymized higher level file merged into. Here you can create a household ")
-  helptxt <- paste0(helptxt, "level file for step 1 and merge the anonymized household level file back into the full dataset for step 2. The dataset needs to contain a household ID.")
+  helptxt <- translate("Often microdata files incur a hierarchical structure, such as a household structure. In such cases the anonymization process consists of two steps: ")
+  helptxt <- paste0(helptxt, tags$br(), translate("1) the anonymization of the higher level records and variables (household file) and "))
+  helptxt <- paste0(helptxt, translate("2) the anonymization of the complete file with the anonymized higher level file merged into. Here you can create a household "))
+  helptxt <- paste0(helptxt, translate("level file for step 1 and merge the anonymized household level file back into the full dataset for step 2. The dataset needs to contain a household ID."))
 
   out <- list(
     fluidRow(
-      column(width = 12, offset = 0, h3("Deal with hierarchical Data"), class="wb-header"),
+      column(width = 12, offset = 0, h3(translate("Deal with hierarchical data")), class="wb-header"),
       column(width = 12, offset = 0, p(HTML(helptxt)), class="wb-header-hint")
     ),
     fluidRow(column(12, rb1, align="center"))
@@ -868,7 +868,7 @@ output$ui_modify_data_sidebar_left <- renderUI({
     if (is.null(inputdata())) {
       return(NULL)
     }
-    btn <- bsButton("btn_reset_inputdata_xx",label=("Reset inputdata"), block=TRUE, style="warning")
+    btn <- bsButton("btn_reset_inputdata_xx",label=(translate("Reset inputdata")), block=TRUE, style="warning")
     fluidRow(
       #column(12, h4("Reset the inputdata"), align="center"),
       column(12, btn)
@@ -895,7 +895,7 @@ output$ui_modify_data_sidebar_left <- renderUI({
 
   output$ui_sel_microdata_btns <- renderUI({
     cc <- choices_modifications()
-    out <- fluidRow(column(12, h4("What do you want to do?")))
+    out <- fluidRow(column(12, h4(translate("What do you want to do?"))))
     for (i in 1:length(cc)) {
       id <- paste0("btn_menu_microdata_",i)
       if (obj$cur_selection_microdata==id) {

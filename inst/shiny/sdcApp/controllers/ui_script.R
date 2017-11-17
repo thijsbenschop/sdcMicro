@@ -23,15 +23,15 @@ output$current_code <- renderText({
 # GUI-output to view script
 output$ui_script_view <- renderUI({
   out <- fluidRow(
-    column(12, h3("View the current generated script"), class="wb-header"),
-    column(12, p("Browse and download the script used to generate your results. These can be used later as a reminder of what you did or entered into R from command-line to reproduce results."), class="wb-header-hint"),
-    column(12, myActionButton("btn_save_script", "Save Script to File", btn.style="primary"), align="center"),
+    column(12, h3(translate("View the current generated script")), class="wb-header"),
+    column(12, p(translate("Browse and download the script used to generate your results. These can be used later as a reminder of what you did or entered into R from command-line to reproduce results.")), class="wb-header-hint"),
+    column(12, myActionButton("btn_save_script", translate("Save script to file"), btn.style="primary"), align="center"),
     column(12, tags$br(), uiOutput("current_code"))
   )
 
   if (!is.null(obj$lastscriptexport)) {
     out <- list(out, fluidRow(
-      column(12, tags$br(), p("Information: the last script you have exported was saved as", code(obj$lastscriptexport)), align="center")))
+      column(12, tags$br(), p(translate("Information: the last script you have exported was saved as"), code(obj$lastscriptexport)), align="center")))
   }
   out
 })
@@ -39,25 +39,25 @@ output$ui_script_view <- renderUI({
 # GUI-output to export script
 output$ui_script_export <- renderUI({
   out <- fluidRow(
-    column(12, h3("Export an existing sdcProblem"), class="wb-header")
+    column(12, h3(translate("Export an existing sdcProblem")), class="wb-header")
   )
   if (!is.null(lastError())) {
     out <- list(out, fluidRow(
-      column(12, h4("Trying to export the current problem instance resulted in the following error!", align="center")),
+      column(12, h4(translate("Trying to export the current problem instance resulted in the following error!"), align="center")),
       column(12, verbatimTextOutput("ui_lasterror"))))
   }
 
   out <- list(out, fluidRow(
     column(12,
-      p("You can save all relevant data and code for later re-use by clicking the button below."),
-      p("Note: This feature is GUI-only and cannot be reproduced from the command-line version."),
+      p(translate("You can save all relevant data and code for later re-use by clicking the button below.")),
+      p(translate("Note: This feature is GUI-only and cannot be reproduced from the command-line version.")),
       class="wb-header-hint"),
     # column(12, p("Note: This feature is GUI-only and cannot be reproduced from the command-line version."), class="wb-header-hint"),
-    column(12, myActionButton("btn_exportProblem", "Save the current problem", btn.style="primary"), align="center")))
+    column(12, myActionButton("btn_exportProblem", translate("Save the current problem"), btn.style="primary"), align="center")))
 
   if (!is.null(obj$lastproblemexport)) {
     out <- list(out, fluidRow(
-      column(12, tags$br(), p("Information: the last data you have exported was saved as", code(obj$lastproblemexport)), align="center")))
+      column(12, tags$br(), p(translate("Information: the last data you have exported was saved as"), code(obj$lastproblemexport)), align="center")))
   }
   out
 })
@@ -68,24 +68,24 @@ output$ui_script_import <- renderUI({
   btn <- myActionButton("btn_reset_inputerror2",label=("Try again!"), "primary")
   if (!is.null(lastError())) {
     return(fluidRow(
-      column(12, h4("Importing previously saved sdcProblem resulted in an error!", align="center")),
+      column(12, h4(translate("Importing previously saved sdcProblem resulted in an error!"), align="center")),
       column(12, verbatimTextOutput("ui_lasterror")),
       column(12, p(btn, align="center"))
     ))
   }
   out <- fluidRow(
-      column(12, h3("Import a previously exported sdcProblem"), class="wb-header"),
-      column(12, p("Upload a previously saved sdcProblem."), class="wb-header-hint")
+      column(12, h3(translate("Import a previously exported sdcProblem")), class="wb-header"),
+      column(12, p(translate("Upload a previously saved sdcProblem.")), class="wb-header-hint")
     )
   if (!is.null(sdcObj())) {
     out <- list(out,
       fluidRow(
         column(12,
-          p("The file must be an",code(".rdata"),"File. Please note that uploading a previously saved problem, will overwrite any existing current sdcProblem-instance!"),
+          p(translate("The file must be an"),code(".rdata"),translate("File. Please note that uploading a previously saved problem, will overwrite any existing current sdcProblem-instance!")),
           class="wb-header-hint")
     ))
   }
-  fI <- fileInput("file_importProblem", strong("Select previously exported sdcProblem (.rdata)"), width="50%", accept=".rdata")
+  fI <- fileInput("file_importProblem", strong(translate("Select previously exported sdcProblem (.rdata)")), width="50%", accept=".rdata")
   out <- list(out, fluidRow(column(12, fI, align="center")))
   out
 })
@@ -106,7 +106,7 @@ output$ui_script_main <- renderUI({
 output$ui_script_sidebar_left <- renderUI({
   output$ui_sel_script_btns <- renderUI({
     cc <- choices_import()
-    out <- fluidRow(column(12, h4("What do you want to do?")))
+    out <- fluidRow(column(12, h4(translate("What do you want to do?"))))
     for (i in 1:length(cc)) {
       if (i==1) {
         style <- "primary"
@@ -130,8 +130,8 @@ output$ui_script <- renderUI({
   if (is.null(obj$inputdata)) {
     return(list(
       noInputData(uri="ui_script"),
-      fluidRow(column(12, tags$br(), p("or go back to tab 'Undo' and upload a previously saved problem instance"), align="center")),
-      fluidRow(column(12, myActionButton("nodata_script_uploadproblem", label="Upload a previously saved problem", btn.style="primary"), align="center"))
+      fluidRow(column(12, tags$br(), p(translate("or go back to tab 'Undo' and upload a previously saved problem instance")), align="center")),
+      fluidRow(column(12, myActionButton("nodata_script_uploadproblem", label=translate("Upload a previously saved problem"), btn.style="primary"), align="center"))
     ))
   } else {
     out <- fluidRow(

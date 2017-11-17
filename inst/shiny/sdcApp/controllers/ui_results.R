@@ -45,9 +45,9 @@ output$ui_results_sidebar_left <- renderUI({
     cc3 <- c("Compare summary statistics", "Disclosure risk", "Information loss")
 
     df <- data.frame(lab=c(cc1,cc2,cc3), header=NA)
-    df$header[1] <- "Risk measures"
-    df$header[4] <- "Visualizations"
-    df$header[8] <- "Numerical risk measures"
+    df$header[1] <- translate("Risk measures")
+    df$header[4] <- translate("Visualizations")
+    df$header[8] <- translate("Numerical risk measures")
 
     out <- NULL
     for (i in 1:nrow(df)) {
@@ -78,8 +78,8 @@ output$ui_results <- renderUI({
   if (is.null(curObj)) {
     return(list(
       noSdcProblem(uri="ui_results"),
-      fluidRow(column(12, tags$br(), p("or go back to tab 'Undo' and upload a previously saved problem instance"), align="center")),
-      fluidRow(column(12, myActionButton("nodata_results_uploadproblem", label="Upload a previously saved problem", btn.style="primary"), align="center"))
+      fluidRow(column(12, tags$br(), p(translate("or go back to tab 'Undo' and upload a previously saved problem instance")), align="center")),
+      fluidRow(column(12, myActionButton("nodata_results_uploadproblem", label=translate("Upload a previously saved problem"), btn.style="primary"), align="center"))
     ))
   } else {
     out <- fluidRow(

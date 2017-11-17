@@ -1,9 +1,9 @@
 # Message, if inputdata were loaded but no categorical variables are available
 # at least one categorical variable is required to setup the sdc-problem
 output$noCatVars <- renderUI({
-  txt <- "Go back to the Microdata tab and convert at least one variable to type factor."
+  txt <- translate("Go back to the Microdata tab and convert at least one variable to type factor.")
   fluidRow(
-    column(12, h4("No categorical variables available!", align="center")),
+    column(12, h4(translate("No categorical variables available!"), align="center")),
     column(12, p(txt, align="center"))
   )
 })
@@ -17,17 +17,17 @@ output$ui_sdcObj_summary <- renderUI({
     }
     x <- print(curObj, type="general", docat=FALSE)
     out <- fluidRow(
-      column(12, h4("Summary of dataset and variable selection"), align="center"),
-      column(12, p("The loaded dataset consists of", code(x$dims[1]),"records and",code(x$dims[2]),"variables."), align="center"),
-      column(12, list("Categorical key variable(s):", lapply(x$keyVars, function(x) {code(x)})), align="center"))
+      column(12, h4(translate("Summary of dataset and variable selection")), align="center"),
+      column(12, p(translate("The loaded dataset consists of"), code(x$dims[1]),translate("records and"),code(x$dims[2]),translate("variables.")), align="center"),
+      column(12, list(translate("Categorical key variable(s):"), lapply(x$keyVars, function(x) {code(x)})), align="center"))
 
     if (length(x$numVars)>0) {
       out <- list(out, fluidRow(
-        column(12, list("Numerical key variable(s):", lapply(x$numVars, function(x) {code(x)})), align="center")))
+        column(12, list(translate("Numerical key variable(s):"), lapply(x$numVars, function(x) {code(x)})), align="center")))
     }
     if (length(x$weightVar)>0) {
       out <- list(out, fluidRow(
-        column(12, list("Sampling weight:", lapply(x$weightVar, function(x) {code(x)})), align="center")))
+        column(12, list(translate("Sampling weight:"), lapply(x$weightVar, function(x) {code(x)})), align="center")))
     }
     # cannot be selected when creating the sdc problem instance
     #if (length(x$strataVar)>0) {
@@ -36,24 +36,24 @@ output$ui_sdcObj_summary <- renderUI({
     #}
     if (length(x$householdId)>0) {
       out <- list(out, fluidRow(
-        column(12, list("Hierarchical identifier:", lapply(x$householdId, function(x) {code(x)})), align="center")))
+        column(12, list(translate("Hierarchical identifier:"), lapply(x$householdId, function(x) {code(x)})), align="center")))
     }
     if (length(x$delVars)>0) {
       out <- list(out, fluidRow(
-        column(12, list("Deleted variable(s):", lapply(x$delVars, function(x) {code(x)})), align="center")))
+        column(12, list(translate("Deleted variable(s):"), lapply(x$delVars, function(x) {code(x)})), align="center")))
     }
     gV <- x$ghostVars
     if (length(gV)>0) {
       out <- list(out, fluidRow(column(12, tags$br(), list("Linked variables:"), align="center")))
       for (i in 1:length(gV)) {
         out <- list(out, fluidRow(
-          column(12, list("Variable(s)", lapply(gV[[i]][[2]], function(x) {
-            code(x)}),"are linked to key variable", code(gV[[i]][[1]])), align="center")))
+          column(12, list(translate("Variable(s)"), lapply(gV[[i]][[2]], function(x) {
+            code(x)}),translate("are linked to key variable"), code(gV[[i]][[1]])), align="center")))
       }
     }
     out <- list(out, fluidRow(
-      column(12, h4("Computation time"), align="center"),
-      column(12, p("The current computation time was ~",code(comptime()),".", align="center"))))
+      column(12, h4(translate("Computation time"), align="center"),
+      column(12, p(translate("The current computation time was ~")),code(comptime()),".", align="center"))))
     out
   })
   output$show_info_recodes <- renderUI({
@@ -65,15 +65,15 @@ output$ui_sdcObj_summary <- renderUI({
     if (is.null(x)) {
       return(invisible(NULL))
     }
-    txt <-"Reported is the number of levels, average frequency of each level and frequency of the smallest level for categorical key variables.
-      In parentheses, the same statistics are shown for the original data. Note that NA (missing) is counted as a separate category."
+    txt <-translate("Reported is the number of levels, average frequency of each level and frequency of the smallest level for categorical key variables.
+      In parentheses, the same statistics are shown for the original data. Note that NA (missing) is counted as a separate category.")
     dt <- data.table(
       "Variable name"=x$keyVars,
       "Number of levels"=paste(x$categories$orig, x$categories$mod),
       "Average frequency"=paste(x$meansize$orig, x$meansize$mod),
       "Frequency of smallest level"=paste(x$minsize$orig, x$minsize$mod))
     out <- fluidRow(
-      column(12, h4("Information on categorical key variables"), align="center"),
+      column(12, h4(translate("Information on categorical key variables")), align="center"),
       column(12, p(txt), align="center"),
       column(12, renderTable(dt), align="center"))
     out
@@ -84,9 +84,9 @@ output$ui_sdcObj_summary <- renderUI({
       return(invisible(NULL))
     }
     x <- print(curObj, type="kAnon", docat=FALSE)
-    txt <- "Below the number of observations violating k-anonymity is shown for the original data and the modified dataset"
+    txt <- translate("Below the number of observations violating k-anonymity is shown for the original data and the modified dataset")
     dt <- data.table(
-      "k-anonymity"=paste0(c(2,3,5),"-anonymity"),
+      "k-anonymity"=paste0(c(2,3,5),translate("-anonymity")),
       "Modified data"=c(paste0(x[["2anon"]]$mod," (",x[["2anon"]]$mod_p,"%)"),
           paste0(x[["3anon"]]$mod," (",x[["3anon"]]$mod_p,"%)"),
           paste0(x[["5anon"]]$mod," (",x[["5anon"]]$mod_p,"%)")),
@@ -94,7 +94,7 @@ output$ui_sdcObj_summary <- renderUI({
           paste0(x[["3anon"]]$orig," (",x[["3anon"]]$orig_p,"%)"),
           paste0(x[["5anon"]]$orig," (",x[["5anon"]]$orig_p,"%)")))
     out <- fluidRow(
-      column(12, h4("Information on k-anonymity"), align="center"),
+      column(12, h4(translate("Information on k-anonymity")), align="center"),
       column(12, p(txt), align="center"),
       column(12, renderTable(dt), align="center"))
     out
@@ -107,14 +107,14 @@ output$ui_sdcObj_summary <- renderUI({
     x <- print(curObj, type="risk", docat=FALSE)
     reident <- x[[1]]$reident
     riskyobs <- x[[1]]$riskyObs
-    txt_risk <- "Observations with a higher risk than the main part of the data are defined as observations with an individual risk higher than the median "
-    txt_risk <- paste0(txt_risk, "plus twice the median absolute deviation of the individual risk of all records in the dataset. Only individuals with an individual risk higher than 0.1 are considered.")
+    txt_risk <- translate("Observations with a higher risk than the main part of the data are defined as observations with an individual risk higher than the median ")
+    txt_risk <- paste0(txt_risk, translate("plus twice the median absolute deviation of the individual risk of all records in the dataset. Only individuals with an individual risk higher than 0.1 are considered."))
     out <- fluidRow(
-      column(12, h4("Risk measures for categorical key variables"), align="center"),
-      column(12, p("We expect",code(reident$mod),"(",code(paste0(reident$mod_p,"%")),") re-identifications in the population, as compared to",
-                   code(reident$orig),"(",code(paste0(reident$orig_p,"%")),") re-identifications in the original data."), align="center"),
-      column(12, p(code(riskyobs$mod)," observations have a higher risk than the risk in the main part of the data, as compared to ",
-                   code(riskyobs$orig)," observations in the original data.", tipify(icon("question"), title=txt_risk, placement="top")), align="center"))
+      column(12, h4(translate("Risk measures for categorical key variables")), align="center"),
+      column(12, p(translate("We expect"),code(reident$mod),"(",code(paste0(reident$mod_p,"%")),translate(") re-identifications in the population, as compared to"),
+                   code(reident$orig),"(",code(paste0(reident$orig_p,"%")),translate(") re-identifications in the original data.")), align="center"),
+      column(12, p(code(riskyobs$mod),translate(" observations have a higher risk than the risk in the main part of the data, as compared to "),
+                   code(riskyobs$orig),translate(" observations in the original data."), tipify(icon("question"), title=txt_risk, placement="top")), align="center"))
     out
   })
   output$show_info_risk <- renderUI({
@@ -127,11 +127,11 @@ output$ui_sdcObj_summary <- renderUI({
       return(invisible(NULL))
     }
     out <- fluidRow(
-      column(12, h4("Risk measures for numerical key variables"), align="center"),
-      column(12, p("The disclosure risk is currently between",code("0%"),"and",code(paste0(x$risk_up,"%")),",
-      as compared to between",code("0%"),"and",code("100%"),"in the original data."), align="center"),
-      column(12, h4("Information loss"), align="center"),
-      column(12, p("Measure",strong("IL1s"),"is",code(x$il1),"and the",strong("differences of eigenvalues"),"are",code(paste0(x$diff_eigen,"%")),"."), align="center")
+      column(12, h4(translate("Risk measures for numerical key variables")), align="center"),
+      column(12, p(translate("The disclosure risk is currently between"),code("0%"),translate("and"),code(paste0(x$risk_up,"%")),translate(",
+      as compared to between"),code("0%"),translate("and"),code("100%"),translate("in the original data.")), align="center"),
+      column(12, h4(translate("Information loss")), align="center"),
+      column(12, p(translate("Measure"),strong("IL1s"),translate("is"),code(x$il1),translate("and the"),strong(translate("differences of eigenvalues")),translate("are"),code(paste0(x$diff_eigen,"%")),"."), align="center")
     )
     out
   })
@@ -150,7 +150,7 @@ output$ui_sdcObj_summary <- renderUI({
     } else {
       meth <- "kAnon()"
       if (length(x$strataVars)>0) {
-        txt <- "Note: k-anonymity was applied per strata!"
+        txt <- translate("Note: k-anonymity was applied per strata!")
       } else {
         txt <- NULL
       }
@@ -159,9 +159,9 @@ output$ui_sdcObj_summary <- renderUI({
     dt <- data.table(keyVar=x$supps$KeyVar)
     dt[,v1:=paste0(x$supps[[2]]," (",x$supps[[3]],"%)")]
     dt[,v2:=paste0(x$suppsT[[2]]," (",x$suppsT[[3]],"%)")]
-    setnames(dt, c("Key variable", paste("Additional suppressions due to last run of",meth), "Total number of missing values (NA) in variable"))
+    setnames(dt, c(translate("Key variable"), paste(translate("Additional suppressions due to last run of"),meth), translate("Total number of missing values (NA) in variable")))
     out <- list(fluidRow(
-      column(12, h4("Information on local suppression"), align="center"),
+      column(12, h4(translate("Information on local suppression")), align="center"),
       column(12, p(txt), align="center"),
       column(12, renderTable(dt), align="center")))
   })
@@ -178,12 +178,12 @@ output$ui_sdcObj_summary <- renderUI({
     dt <- x$pram_summary
     for (i in 1:nrow(dt)) {
       out <- list(out, fluidRow(
-        column(12, p("Variable",code(dt$variable[i])), align="center"),
-        column(12, tags$i("transition matrix"), align="center"),
+        column(12, p(translate("Variable"),code(dt$variable[i])), align="center"),
+        column(12, tags$i(translate("transition matrix")), align="center"),
         column(12, uiOutput(paste0("transmat_pram_",i)), align="center")))
     }
     out <- list(out, fluidRow(
-      column(12, p("Summary of changed observations due to PRAM"), align="center"),
+      column(12, p(translate("Summary of changed observations due to PRAM")), align="center"),
       column(12, renderTable(dt), align="center")))
     out
   })
@@ -201,7 +201,7 @@ output$ui_sdcObj_summary <- renderUI({
       dt[is.na(`NA's`),`NA's`:="0"]
     }
     dt <- cbind(data.table(Variable=rep(x$numVars, each=2)), dt)
-    out <- fluidRow(column(12, h4("Compare numerical key variables"), align="center"))
+    out <- fluidRow(column(12, h4(translate("Compare numerical key variables")), align="center"))
     out <- list(out, fluidRow(
       column(12, renderTable(dt), align="center")
     ))
@@ -209,12 +209,12 @@ output$ui_sdcObj_summary <- renderUI({
   })
   output$anonMethods <- renderUI({
     anon_methods <- unique(anonPerformed())
-    out <- fluidRow(column(12, h4("Anonymization steps"),align="center"))
+    out <- fluidRow(column(12, h4(translate("Anonymization steps")),align="center"))
     if (is.null(anon_methods)) {
-      out <- list(out, fluidRow(column(12, code("No methods have been applied"),align="center")))
+      out <- list(out, fluidRow(column(12, code(translate("No methods have been applied")),align="center")))
       return(out)
     } else {
-      out <- fluidRow(column(12, h4("Anonymization steps"),align="center"))
+      out <- fluidRow(column(12, h4(translate("Anonymization steps")),align="center"))
       for (i in 1:length(anon_methods)) {
         out <- list(out, fluidRow(column(12, code(anon_methods[i]),align="center")))
       }
@@ -226,12 +226,12 @@ output$ui_sdcObj_summary <- renderUI({
   out <- NULL
   if (!is.null(lastError())) {
     out <- list(out, fluidRow(
-      column(12, h4("Application of the last method resulted in the following error!", align="center")),
+      column(12, h4(translate("Application of the last method resulted in the following error!"), align="center")),
       column(12, verbatimTextOutput("ui_lasterror"))))
   }
   if (!is.null(lastWarning())) {
     out <- list(out, fluidRow(
-      column(12, inp=h4("Application of the last method resulted in the following warning!", align="center")),
+      column(12, inp=h4(translate("Application of the last method resulted in the following warning!"), align="center")),
       column(12, inp=verbatimTextOutput("ui_lastwarning"))))
   }
   out <- list(out, fluidRow(
@@ -250,7 +250,7 @@ output$ui_sdcObj_summary <- renderUI({
 ## explore current variables
 output$ui_sdcObj_explorevars <- renderUI({
   output$ui_selanonvar1 <- renderUI({
-    selectInput("view_selanonvar1", choices=allVars(), label=h5("Choose a variable"), multiple=FALSE, selected=obj$inp_sel_anonvar1, width="100%")
+    selectInput("view_selanonvar1", choices=allVars(), label=h5(translate("Choose a variable")), multiple=FALSE, selected=obj$inp_sel_anonvar1, width="100%")
   })
   # This is required so that usual changes of the dropdown-select are also reflected in the reactive variable obj$inp_sel_anonvar1
   observeEvent(input$ui_selanonvar1, {
@@ -258,7 +258,7 @@ output$ui_sdcObj_explorevars <- renderUI({
   })
   output$ui_selanonvar2 <- renderUI({
     vv <- setdiff(allVars(), input$view_selanonvar1)
-    selectInput("view_selanonvar2", choices=c("none", vv), label=h5("Choose a second variable (optional)"), multiple=FALSE, width="100%")
+    selectInput("view_selanonvar2", choices=c("none", vv), label=h5(translate("Choose a second variable (optional)")), multiple=FALSE, width="100%")
   })
 
   observeEvent(input$view_selanonvar1, {
@@ -306,7 +306,7 @@ output$ui_sdcObj_explorevars <- renderUI({
     if (!is.null(v2) && v2=="none") {
       if (cl1) {
         res <- list(tab=summaryfn(inputdata[[v1]]))
-        colnames(res$tab) <- c(v1, "Frequency", "Percentage")
+        colnames(res$tab) <- c(v1, translate("Frequency"), ("Percentage"))
       } else {
         res <- list(tab=as.data.frame(t(summaryfn(inputdata[[v1]]))))
       }
@@ -347,10 +347,10 @@ output$ui_sdcObj_explorevars <- renderUI({
       out <- list(out, fluidRow(column(12, renderTable(res$tab, include.rownames=FALSE), align="center")))
     } else {
       out <- list(out, fluidRow(
-        column(12, h5(HTML(paste("Correlation between",code(res$vars[1]),"and",code(res$vars[2]),":",code(res$vcor))), align="center")),
-        column(12, h5(HTML(paste("Summary of variable",code(res$vars[1]))), align="center")),
+        column(12, h5(HTML(paste(translate("Correlation between"),code(res$vars[1]),translate("and"),code(res$vars[2]),":",code(res$vcor))), align="center")),
+        column(12, h5(HTML(paste(translate("Summary of variable"),code(res$vars[1]))), align="center")),
         column(12, renderTable(res$tab1, include.rownames=FALSE), align="center"),
-        column(12, h5(HTML(paste("Summary of variable",code(res$vars[2]))), align="center")),
+        column(12, h5(HTML(paste(translate("Summary of variable"),code(res$vars[2]))), align="center")),
         column(12, renderTable(res$tab2, include.rownames=FALSE), align="center")))
     }
 
@@ -358,10 +358,10 @@ output$ui_sdcObj_explorevars <- renderUI({
     nainfo$nr_na <- as.integer(unlist(lapply(df, function(x) { sum(is.na(x)) })))
     nainfo$perc_na <- formatC(100*(nainfo$nr_na/nrow(df)), format="f", digits=2)
     out <- list(out,
-      fluidRow(column(12, "Variable",code(nainfo$variable[1]),"has",code(nainfo$nr_na[1]),"(",code(paste0(nainfo$perc_na[1],"%")),") missing values.", align="center")))
+      fluidRow(column(12, translate("Variable"),code(nainfo$variable[1]),translate("has"),code(nainfo$nr_na[1]),"(",code(paste0(nainfo$perc_na[1],"%")),translate(") missing values."), align="center")))
     if (nrow(nainfo)==2 & nainfo$variable[2]!="none") {
       out <- list(out,
-      fluidRow(column(12, "Variable",code(nainfo$variable[2]),"has",code(nainfo$nr_na[2]),"(",code(paste0(nainfo$perc_na[2],"%")),") missing values.", align="center")))
+      fluidRow(column(12, translate("Variable"),code(nainfo$variable[2]),translate("has"),code(nainfo$nr_na[2]),"(",code(paste0(nainfo$perc_na[2],"%")),translate(") missing values."), align="center")))
     }
     out
   })
@@ -406,11 +406,11 @@ output$ui_sdcObj_explorevars <- renderUI({
 
   if (!is.null(lastError())) {
     return(fluidRow(
-      column(12, h4("The following error has occured!", align="center")),
+      column(12, h4(translate("The following error has occured!"), align="center")),
       column(12, code(lastError()))))
   }
 
-  out <- fluidRow(column(12, h4("Explore variables in modified data"), align="center"))
+  out <- fluidRow(column(12, h4(translate("Explore variables in modified data")), align="center"))
   out <- list(out, fluidRow(
     column(6, uiOutput("ui_selanonvar1")),
     column(6, uiOutput("ui_selanonvar2"))))
@@ -429,15 +429,15 @@ output$ui_sdcObj_addghostvars <- renderUI({
     if (length(input$sel_gv2)==0) {
       return(NULL)
     }
-    btn_ghosts <- myActionButton("btn_addGhostVars", label="Add linked variables", "primary")
+    btn_ghosts <- myActionButton("btn_addGhostVars", label=translate("Add linked variables"), "primary")
   })
   output$addgv_v1 <- renderUI({
     res <- possGhostVars()
-    selectInput("sel_gv1", label=h5("Select categorical key variable"), choices=res$kv, width="100%")
+    selectInput("sel_gv1", label=h5(translate("Select categorical key variable")), choices=res$kv, width="100%")
   })
   output$addgv_v2 <- renderUI({
     res <- possGhostVars()
-    selectInput("sel_gv2", label=h5("Select linked variable(s)"), choices=res$gv,  multiple=TRUE, width="100%")
+    selectInput("sel_gv2", label=h5(translate("Select linked variable(s)")), choices=res$gv,  multiple=TRUE, width="100%")
   })
 
   res <- possGhostVars()
@@ -446,11 +446,11 @@ output$ui_sdcObj_addghostvars <- renderUI({
       h4("No variables are available that could be used as",code("linked variables"),".", align="center"))))
   }
 
-  helptxt <- "Often datasets contain variables that are related to the key variables used for local suppression and could be used to reconstruct suppressed values. Here you can link variables to"
-  helptxt <- paste(helptxt, "categorical key variables. Any suppression in the key variable will lead to a suppression in the variable(s) linked")
-  helptxt <- paste(helptxt, "to that key variable. Several variables can be linked to one key variable.")
+  helptxt <- translate("Often datasets contain variables that are related to the key variables used for local suppression and could be used to reconstruct suppressed values. Here you can link variables to")
+  helptxt <- paste(helptxt, translate("categorical key variables. Any suppression in the key variable will lead to a suppression in the variable(s) linked"))
+  helptxt <- paste(helptxt, translate("to that key variable. Several variables can be linked to one key variable."))
   out <- fluidRow(
-    column(12, h4("Add linked variables"), align="center"),
+    column(12, h4(translate("Add linked variables")), align="center"),
     column(12, p(helptxt), align="center"))
   out <- list(out, fluidRow(
     column(6, uiOutput("addgv_v1"), align="center"),
@@ -463,10 +463,10 @@ output$ui_sdcObj_addghostvars <- renderUI({
 ## add new random ID-variable
 output$ui_sdcObj_randIds <- renderUI({
   output$randid_newid <- renderUI({
-    textInput("txt_randid_newid", label=h5("Specify name for the new ID variable"), width="100%")
+    textInput("txt_randid_newid", label=h5(translate("Specify name for the new ID variable")), width="100%")
   })
   output$randid_withinvar <- renderUI({
-    selectInput("sel_randid_withinvar", label=h5("If used, the ID will be the same for equal values of the selected variable"),
+    selectInput("sel_randid_withinvar", label=h5(translate("If used, the ID will be the same for equal values of the selected variable")),
       choices=c("none",allVars()), multiple=FALSE, width="100%")
   })
   output$randid_btn <- renderUI({
@@ -480,13 +480,13 @@ output$ui_sdcObj_randIds <- renderUI({
     myActionButton("btn_addRandID", label=("Add new ID variable"), "primary")
   })
 
-  helptxt <- "The ID in microdata as well as the order of records can be used to reconstruct suppressed values."
-  helptxt <- paste(helptxt, "Here you create a new randomized ID that can be used to replace the existing ID. To create a new household ID")
-  helptxt <- paste(helptxt, "you can select the household ID as a variable for which the new ID should be the same for equal values.")
-  helptxt2 <- "Note: Do not forget to remove the existing ID after exporting the data."
+  helptxt <- translate("The ID in microdata as well as the order of records can be used to reconstruct suppressed values.")
+  helptxt <- paste(helptxt, translate("Here you create a new randomized ID that can be used to replace the existing ID. To create a new household ID"))
+  helptxt <- paste(helptxt, translate("you can select the household ID as a variable for which the new ID should be the same for equal values."))
+  helptxt2 <- translate("Note: Do not forget to remove the existing ID after exporting the data.")
 
   out <- fluidRow(
-    column(12, h4("Add a new random ID variable"), align="center"),
+    column(12, h4(translate("Add a new random ID variable")), align="center"),
     column(12, p(helptxt), align="center"),
     column(12, p(helptxt2), align="center"))
   out <- list(out, fluidRow(
@@ -518,7 +518,9 @@ sdcData <- reactive({
   )
   df$nrCodes <- sapply(inputdata, function(x) { length(unique(x))} )
   df$nrNA <- sapply(inputdata, function(x) { sum(is.na(x))} )
-  colnames(df) <- c("Variable name", "Type", "Key variables", "Weight", "Hierarchical identifier", "PRAM", "Delete", "Number of levels", "Number of missing")
+  colnames(df) <- c(translate("Variable name"), translate("Type"), translate("Key variables"), translate("Weight"), 
+                    translate("Hierarchical identifier"), translate("PRAM"), translate("Delete"), 
+                    translate("Number of levels"), translate("Number of missing"))
   rownames(df) <- NULL
   df
 })
@@ -559,18 +561,18 @@ output$setupbtn <- renderUI({
   ii <- which(useAsKeys=="Cat." & types%in%c("numeric","character"))
   if (length(ii)>0) {
     showBtn <- FALSE
-    txt <- p("Categorical key variables have to be of type",dQuote("factor"), " or type ", dQuote("integer"),".", tags$br(), tags$br(),
-      tags$span(style="color:red; font-weight:bold","Change the variable selection or go back to the Microdata tab and change the variable type before making other variable selections."))
-    showModal(modalDialog(list(txt), title=strong(paste("Invalid variable choice for ",dQuote(vnames[ii]))), footer=modalButton("Continue"), size="m", easyClose=TRUE, fade=TRUE), session=session)
+    txt <- p(translate("Categorical key variables have to be of type"),dQuote("factor"), translate(" or type "), dQuote("integer"),".", tags$br(), tags$br(),
+      tags$span(style="color:red; font-weight:bold",translate("Change the variable selection or go back to the Microdata tab and change the variable type before making other variable selections.")))
+    showModal(modalDialog(list(txt), title=strong(paste(translate("Invalid variable choice for "),dQuote(vnames[ii]))), footer=modalButton(translate("Continue")), size="m", easyClose=TRUE, fade=TRUE), session=session)
   }
 
   # some selected numerical key-variables are factor or character
   ii <- which(useAsKeys=="Cont." & types%in%c("factor","character"))
   if (length(ii)>0) {
     showBtn <- FALSE
-    txt <- p("Continuous key variables have to be of type ",dQuote("numeric")," or type ",dQuote("integer"), tags$br(), tags$br(),
-      tags$span(style="color:red; font-weight:bold","Change the variable selection or go back to the Microdata tab and change the variable type before making other variable selections."))
-    showModal(modalDialog(list(txt), title=strong(paste("Invalid variable choice for ",dQuote(vnames[ii]))), footer=modalButton("Continue"), size="m", easyClose=TRUE, fade=TRUE), session=session)
+    txt <- p(translate("Continuous key variables have to be of type "),dQuote("numeric"),translate(" or type "),dQuote("integer"), tags$br(), tags$br(),
+      tags$span(style="color:red; font-weight:bold",translate("Change the variable selection or go back to the Microdata tab and change the variable type before making other variable selections.")))
+    showModal(modalDialog(list(txt), title=strong(paste(translate("Invalid variable choice for "),dQuote(vnames[ii]))), footer=modalButton(translate("Continue")), size="m", easyClose=TRUE, fade=TRUE), session=session)
   }
 
   ## pram
@@ -579,28 +581,28 @@ output$setupbtn <- renderUI({
     # selected pram vars must not be key-vars
     if (any(useAsKeys[ii] %in% c("Cat.","Cont."))) {
       showBtn <- FALSE
-      txt <- p("Selected pram variables are also key variables.", tags$br(), tags$br(),
-        tags$span(style="color:red; font-weight:bold","You need to undo the pram variable selection and select only pram variables that are not selected as key variables before making other variable selections!"))
-      showModal(modalDialog(list(txt), title=strong(paste("Invalid variable choice (",dQuote(vnames[ii]),")")), footer=modalButton("Continue"), size="m", easyClose=TRUE, fade=TRUE), session=session)
+      txt <- p(translate("Selected pram variables are also key variables."), tags$br(), tags$br(),
+        tags$span(style="color:red; font-weight:bold",translate("You need to undo the pram variable selection and select only pram variables that are not selected as key variables before making other variable selections!")))
+      showModal(modalDialog(list(txt), title=strong(paste(translate("Invalid variable choice ("),dQuote(vnames[ii]),")")), footer=modalButton("Continue"), size="m", easyClose=TRUE, fade=TRUE), session=session)
     }
     if (any(useAsWeight[ii] == TRUE)) {
       showBtn <- FALSE
-      txt <- p("The selected PRAM variable is also selected as weight variable.", tags$br(), tags$br(),
-        tags$span(style="color:red; font-weight:bold","Undo the PRAM variable selection and select only PRAM variables that are not selected as weight variables before making other variable selections!"))
-      showModal(modalDialog(list(txt), title=strong(paste("Invalid variable choice (",dQuote(vnames[ii]),")")), footer=modalButton("Continue"), size="m", easyClose=TRUE, fade=TRUE), session=session)
+      txt <- p(translate("The selected PRAM variable is also selected as weight variable."), tags$br(), tags$br(),
+        tags$span(style="color:red; font-weight:bold",translate("Undo the PRAM variable selection and select only PRAM variables that are not selected as weight variables before making other variable selections!")))
+      showModal(modalDialog(list(txt), title=strong(paste(translate("Invalid variable choice ("),dQuote(vnames[ii]),")")), footer=modalButton(translate("Continue")), size="m", easyClose=TRUE, fade=TRUE), session=session)
     }
     if (any(useAsClusterID[ii] == TRUE)) {
       showBtn <- FALSE
-      txt <- p("The selected PRAM variable is also selected as hierarchical identifier.", tags$br(), tags$br(),
-        tags$span(style="color:red; font-weight:bold","Undo the PRAM variable selection and select only PRAM variables that are not selected as hierarchcal identifier before making other variable selections!"))
-      showModal(modalDialog(list(txt), title=strong(paste("Invalid variable choice (",dQuote(vnames[ii]),")")), footer=modalButton("Continue"), size="m", easyClose=TRUE, fade=TRUE), session=session)
+      txt <- p(translate("The selected PRAM variable is also selected as hierarchical identifier."), tags$br(), tags$br(),
+        tags$span(style="color:red; font-weight:bold",translate("Undo the PRAM variable selection and select only PRAM variables that are not selected as hierarchcal identifier before making other variable selections!")))
+      showModal(modalDialog(list(txt), title=strong(paste(translate("Invalid variable choice ("),dQuote(vnames[ii]),")")), footer=modalButton("Continue"), size="m", easyClose=TRUE, fade=TRUE), session=session)
     }
     kk <- which(types[ii] != "factor")
     if (length(kk)>0) {
       showBtn <- FALSE
-      txt <- p("Pram variables have to be of type ",dQuote("factor"),".", tags$br(), tags$br(),
-        tags$span(style="color:red; font-weight:bold","Change the variable selection or go back to the Microdata tab and change the variable type before making other variable selections."))
-      showModal(modalDialog(list(txt), title=strong(paste("Invalid variable choice (",dQuote(vnames[ii]),")")), footer=modalButton("Continue"), size="m", easyClose=TRUE, fade=TRUE), session=session)
+      txt <- p(translate("Pram variables have to be of type "),dQuote("factor"),".", tags$br(), tags$br(),
+        tags$span(style="color:red; font-weight:bold",translate("Change the variable selection or go back to the Microdata tab and change the variable type before making other variable selections.")))
+      showModal(modalDialog(list(txt), title=strong(paste(translate("Invalid variable choice ("),dQuote(vnames[ii]),")")), footer=modalButton(translate("Continue")), size="m", easyClose=TRUE, fade=TRUE), session=session)
     }
   }
 
@@ -609,31 +611,31 @@ output$setupbtn <- renderUI({
   # more than one weight-variable
   if (length(ii)>1) {
     showBtn <- FALSE
-    txt <- p("More than one weight variable is selected.", tags$br(), tags$br(),
-      tags$span(style="color:red; font-weight:bold","Undo the multiple weight variable selection and select only one weight variable before making other variable selections!"))
-    showModal(modalDialog(list(txt), title=strong(paste("Invalid variable choice (",dQuote(vnames[ii]),")")), footer=modalButton("Continue"), size="m", easyClose=TRUE, fade=TRUE), session=session)
+    txt <- p(translate("More than one weight variable is selected."), tags$br(), tags$br(),
+      tags$span(style="color:red; font-weight:bold",translate("Undo the multiple weight variable selection and select only one weight variable before making other variable selections!")))
+    showModal(modalDialog(list(txt), title=strong(paste(translate("Invalid variable choice ("),dQuote(vnames[ii]),")")), footer=modalButton(translate("Continue")), size="m", easyClose=TRUE, fade=TRUE), session=session)
   }
   if (length(ii)==1) {
     # weights can't be any-key variables
     if (useAsKeys[ii]!="No") {
       showBtn <- FALSE
-      txt <- p("The selected weight variable is also selected as key variable.", tags$br(), tags$br(),
-        tags$span(style="color:red; font-weight:bold","Undo the weight variable selection and select a weight variable that is not selected as key variable before making other variable selections!"))
-      showModal(modalDialog(list(txt), title=strong(paste("Invalid variable choice (",dQuote(vnames[ii]),")")), footer=modalButton("Continue"), size="m", easyClose=TRUE, fade=TRUE), session=session)
+      txt <- p(translate("The selected weight variable is also selected as key variable."), tags$br(), tags$br(),
+        tags$span(style="color:red; font-weight:bold",translate("Undo the weight variable selection and select a weight variable that is not selected as key variable before making other variable selections!")))
+      showModal(modalDialog(list(txt), title=strong(paste(translate("Invalid variable choice ("),dQuote(vnames[ii]),")")), footer=modalButton(translate("Continue")), size="m", easyClose=TRUE, fade=TRUE), session=session)
     }
     # weight-variables must be numeric
     if (!types[ii] %in% c("numeric","integer")) {
       showBtn <- FALSE
-      txt <- p("The weight variable has to be of type ",dQuote("numeric")," or type ", dQuote("integer"),".", tags$br(), tags$br(),
-        tags$span(style="color:red; font-weight:bold","Change the variable selection or go back to the Microdata tab and change the variable type before making other variable selections."))
-      showModal(modalDialog(list(txt), title=strong(paste("Invalid variable choice (" ,dQuote(vnames[ii]),")")), footer=modalButton("Continue"), size="m", easyClose=TRUE, fade=TRUE), session=session)
+      txt <- p(translate("The weight variable has to be of type "),dQuote("numeric"),translate(" or type "), dQuote("integer"),".", tags$br(), tags$br(),
+        tags$span(style="color:red; font-weight:bold",translate("Change the variable selection or go back to the Microdata tab and change the variable type before making other variable selections.")))
+      showModal(modalDialog(list(txt), title=strong(paste(translate("Invalid variable choice (") ,dQuote(vnames[ii]),")")), footer=modalButton(translate("Continue")), size="m", easyClose=TRUE, fade=TRUE), session=session)
     }
     # weight-variable must not contain missing values (NA)
     if (any(is.na(inputdata()[[vnames[ii]]]))) {
       showBtn <- FALSE
-      txt <- p("The weight variable contains", sum(is.na(inputdata()[[vnames[ii]]])),"missing value(s) (NA).", tags$br(), tags$br(),
-        tags$span(style="color:red; font-weight:bold", "Undo the weight variable selection and select a weight variable that does not contain missing values before making other variable selections or remove the missing values in the weight variable in the dataset and reload the dataset!"))
-      showModal(modalDialog(list(txt), title=strong(paste("Missing value(s) in selected weight variable (",dQuote(vnames[ii]),")")), footer=modalButton("Continue"), size="m", easyClose=TRUE, fade=TRUE), session=session)
+      txt <- p(translate("The weight variable contains"), sum(is.na(inputdata()[[vnames[ii]]])),translate("missing value(s) (NA)."), tags$br(), tags$br(),
+        tags$span(style="color:red; font-weight:bold", translate("Undo the weight variable selection and select a weight variable that does not contain missing values before making other variable selections or remove the missing values in the weight variable in the dataset and reload the dataset!")))
+      showModal(modalDialog(list(txt), title=strong(paste(translate("Missing value(s) in selected weight variable ("),dQuote(vnames[ii]),")")), footer=modalButton(translate("Continue")), size="m", easyClose=TRUE, fade=TRUE), session=session)
     }
   }
   ## cluster-ids
@@ -641,16 +643,16 @@ output$setupbtn <- renderUI({
   # more than one cluster-ids
   if (length(ii)>1) {
     showBtn <- FALSE
-    txt <- p("More than one hierarchical identifier is selected.", tags$br(), tags$br(),
-      tags$span(style="color:red; font-weight:bold","Undo the multiple hierarchical identifier selection and select only one hierarchcial identifier before making other variable selections."))
-    showModal(modalDialog(list(txt), title=strong(paste("Invalid variable choice (",dQuote(vnames[ii]),")")), footer=modalButton("Continue"), size="m", easyClose=TRUE, fade=TRUE), session=session)
+    txt <- p(translate("More than one hierarchical identifier is selected."), tags$br(), tags$br(),
+      tags$span(style="color:red; font-weight:bold",translate("Undo the multiple hierarchical identifier selection and select only one hierarchcial identifier before making other variable selections.")))
+    showModal(modalDialog(list(txt), title=strong(paste(translate("Invalid variable choice ("),dQuote(vnames[ii]),")")), footer=modalButton(translate("Continue")), size="m", easyClose=TRUE, fade=TRUE), session=session)
   }
   if (length(ii)==1) {
     # cluster-ids can't be any-key variables
     if (useAsKeys[ii]!="No") {
       showBtn <- FALSE
-      txt <- paste0("The selected hierarchical identifier is also selected as key variable.", " Undo the hierarchical identifier selection and select a hierarchical identifier that is not selected as key variable.")
-      showModal(modalDialog(list(p(txt)), title=strong(paste("Invalid variable choice (",dQuote(vnames[ii]),")")), footer=modalButton("Dismiss"), size="m", easyClose=TRUE, fade=TRUE), session=session)
+      txt <- paste0(translate("The selected hierarchical identifier is also selected as key variable.", " Undo the hierarchical identifier selection and select a hierarchical identifier that is not selected as key variable."))
+      showModal(modalDialog(list(p(txt)), title=strong(paste(translate("Invalid variable choice ("),dQuote(vnames[ii]),")")), footer=modalButton(translate("Dismiss")), size="m", easyClose=TRUE, fade=TRUE), session=session)
     }
   }
 
@@ -660,9 +662,9 @@ output$setupbtn <- renderUI({
     zz <- intersect(which(useAsKeys %in% c("Cat.","Cont.")), ii)
     if (length(zz)>0) {
       showBtn <- FALSE
-      txt <- p("The variable selected to be deleted is also selected as key variable.", tags$br(), tags$br(),
-        tags$span(style="color:red; font-weight:bold","Undo this variable selection and select only variables to be deleted that are not selected as key variable before making other variable selections."))
-      showModal(modalDialog(list(txt), title=strong(paste("Invalid variable choice (",dQuote(vnames[zz]),")")), footer=modalButton("Continue"), size="m", easyClose=TRUE, fade=TRUE), session=session)
+      txt <- p(translate("The variable selected to be deleted is also selected as key variable."), tags$br(), tags$br(),
+        tags$span(style="color:red; font-weight:bold",translate("Undo this variable selection and select only variables to be deleted that are not selected as key variable before making other variable selections.")))
+      showModal(modalDialog(list(txt), title=strong(paste(translate("Invalid variable choice ("),dQuote(vnames[zz]),")")), footer=modalButton("Continue"), size="m", easyClose=TRUE, fade=TRUE), session=session)
     }
     zz <- intersect(which(useAsPram), ii)
     if (length(zz)>0) {
@@ -674,19 +676,19 @@ output$setupbtn <- renderUI({
     zz <- intersect(which(useAsWeight), ii)
     if (length(zz)>0) {
       showBtn <- FALSE
-      txt <- p("The variable selected to be deleted is also selected as weight variable.", tags$br(), tags$br(),
-        tags$span(style="color:red; font-weight:bold","Undo this variable selection and select only variables to be deleted that are not selected as weight variable before making other variable selections."))
-      showModal(modalDialog(list(txt), title=strong(paste("Invalid variable choice (",dQuote(vnames[zz]),")")), footer=modalButton("Continue"), size="m", easyClose=TRUE, fade=TRUE), session=session)
+      txt <- p(translate("The variable selected to be deleted is also selected as weight variable."), tags$br(), tags$br(),
+        tags$span(style="color:red; font-weight:bold",translate("Undo this variable selection and select only variables to be deleted that are not selected as weight variable before making other variable selections.")))
+      showModal(modalDialog(list(txt), title=strong(paste(translate("Invalid variable choice ("),dQuote(vnames[zz]),")")), footer=modalButton(translate("Continue")), size="m", easyClose=TRUE, fade=TRUE), session=session)
     }
     zz <- intersect(which(useAsClusterID), ii)
     if (length(zz)>0) {
       showBtn <- FALSE
-      txt <- p("Selected variable to be deleted is also selected as hierarchical identifier.", tags$br(), tags$br(),
-        tags$span(style="color:red; font-weight:bold","Undo this variable selection and select only variables to be deleted that are not selected as hierarchical indentifier before making other variable selections."))
-      showModal(modalDialog(list(txt), title=strong(paste("Invalid variable choice (",dQuote(vnames[zz]),")")), footer=modalButton("Continue"), size="m", easyClose=TRUE, fade=TRUE), session=session)
+      txt <- p(translate("Selected variable to be deleted is also selected as hierarchical identifier."), tags$br(), tags$br(),
+        tags$span(style="color:red; font-weight:bold",translate("Undo this variable selection and select only variables to be deleted that are not selected as hierarchical indentifier before making other variable selections.")))
+      showModal(modalDialog(list(txt), title=strong(paste("translate(Invalid variable choice (",dQuote(vnames[zz]),")")), footer=modalButton(translate("Continue")), size="m", easyClose=TRUE, fade=TRUE), session=session)
     }
   }
-  btn <- myActionButton("btn_setup_sdc",label=("Setup SDC problem"), "primary")
+  btn <- myActionButton("btn_setup_sdc",label=(translate("Setup SDC problem")), "primary")
   if (showBtn==TRUE) {
     return(fluidRow(column(12, div(btn, align="center"))))
   } else {
@@ -696,14 +698,14 @@ output$setupbtn <- renderUI({
 
 # show additional parameters
 output$setup_moreparams <- renderUI({
-  txt_seed <- "The seed is used to initialize the random number generator used for probabilistic methods."
-  txt_alpha <- "The parameter alpha is used to compute the frequencies of keys, which is used to compute risk"
-  txt_alpha <- paste(txt_alpha, "measures for categorical key variables. Alpha is the weight with which a key that coincides based on a missing value (NA) contributes to these frequencies.")
+  txt_seed <- translate("The seed is used to initialize the random number generator used for probabilistic methods.")
+  txt_alpha <- translate("The parameter alpha is used to compute the frequencies of keys, which is used to compute risk")
+  txt_alpha <- paste(txt_alpha, translate("measures for categorical key variables. Alpha is the weight with which a key that coincides based on a missing value (NA) contributes to these frequencies."))
   sl_alpha <- sliderInput("sl_alpha",
-    label=h5("Parameter 'alpha'", tipify(icon("question"), title=txt_alpha, placement="top")),
+    label=h5(translate("Parameter 'alpha'"), tipify(icon("question"), title=txt_alpha, placement="top")),
     value=1, min=0, max=1, step=0.01, width="90%")
   sl_seed <- sliderInput("sl_seed",
-    label=h5("Parameter 'seed'", tipify(icon("question"), title=txt_seed, placement="top")),
+    label=h5(translate("Parameter 'seed'"), tipify(icon("question"), title=txt_seed, placement="top")),
     value=0, min=-250, max=250, step=1, round=FALSE, width="90%")
   out <- list(
     fluidRow(column(6, sl_alpha, align="center"), column(6, sl_seed, align="center")))
@@ -717,11 +719,11 @@ output$ui_sdcObj_create1 <- renderUI({
     out <- list(out, fluidRow(column(12, verbatimTextOutput("ui_lasterror"))))
   }
 
-  txt_setup <- "Select the following variables for setting up the SDC problem instance: categorical key variables, continuous key variables (optional), variables selected for PRAM (optional), sample weight (optional), hierarchical identifier (optional), variables to be deleted (optional). Also, specify the parameter alpha and set a seed at the bottom of this page."
-  txt_setup <- paste(txt_setup, tags$br(), tags$br(), "Tip - Before you start, make sure that variable types are appropriate. If not, go to the Microdata tab and convert variables to numeric or factor.")
+  txt_setup <- translate("Select the following variables for setting up the SDC problem instance: categorical key variables, continuous key variables (optional), variables selected for PRAM (optional), sample weight (optional), hierarchical identifier (optional), variables to be deleted (optional). Also, specify the parameter alpha and set a seed at the bottom of this page.")
+  txt_setup <- paste(txt_setup, tags$br(), tags$br(), translate("Tip - Before you start, make sure that variable types are appropriate. If not, go to the Microdata tab and convert variables to numeric or factor."))
 
   out <- list(out,
-    fluidRow(column(12, h4("Select variables", tipify(icon("info-circle"), title=txt_setup, placement="bottom"), class="wb-block-title"), align="center")),
+    fluidRow(column(12, h4(translate("Select variables"), tipify(icon("info-circle"), title=txt_setup, placement="bottom"), class="wb-block-title"), align="center")),
     fluidRow(column(12, DT::dataTableOutput("setupTable", height="100%"))))
   out
 })
@@ -763,16 +765,16 @@ output$ui_sdcObj_info <- renderUI({
           #plot(inp, main=NULL)
         }), align="center")))
       #line = (0.5 * max(nchar(names(table(inp, useNA = "always"))) / (36/length(table(inp, useNA = "always"))))),
-      ui_nrLevs <- p("Number of levels including missing (NA):", code(length(table(inp, useNA="always"))))
+      ui_nrLevs <- p(translate("Number of levels including missing (NA):"), code(length(table(inp, useNA="always"))))
     } else {
       out <- list(out, fluidRow(
         column(12, renderPlot(hist(inp, main=NULL, xlab = input$sel_infov)), align="center")))
-      ui_nrLevs <- p("Number of unique values including missing (NA):", code(length(table(inp, useNA="always"))))
+      ui_nrLevs <- p(translate("Number of unique values including missing (NA):"), code(length(table(inp, useNA="always"))))
     }
 
     if (is.factor(inp)) {
       tt <- as.data.frame.table(table(inp, useNA="always"))
-      colnames(tt) <- c("Level", "Frequency")
+      colnames(tt) <- c(translate("Level"), translate("Frequency"))
       out <- list(out, fluidRow(
         column(12, ui_nrLevs, align="center"),
         column(12, renderTable(tt))))
@@ -786,13 +788,13 @@ output$ui_sdcObj_info <- renderUI({
 })
 
 output$sel_sdc_infovar <- renderUI({
-  selectInput("sel_infov", label=h4("Explore variables", class="wb-block-title"), choices=allVars(), width="100%")
+  selectInput("sel_infov", label=h4(translate(translate("Explore variables")), class="wb-block-title"), choices=allVars(), width="100%")
 })
 
 output$ui_sdcObj_create <- renderUI({
   out <- fluidRow(
-    column(width = 12, offset = 0, h3("Anonymize"), class="wb-header"),
-    column(width = 12, offset = 0, p("Select and export variables."), class="wb-header-hint"),
+    column(width = 12, offset = 0, h3(translate("Anonymize")), class="wb-header"),
+    column(width = 12, offset = 0, p(translate("Select and export variables.")), class="wb-header-hint"),
     # column(8, div(style='padding-right: 15px;height: 550px; overflow-y: scroll',uiOutput("ui_sdcObj_create1")), uiOutput("setup_moreparams"), uiOutput("setupbtn")),
     column(8, div(style='height: 550px;',uiOutput("ui_sdcObj_create1")), uiOutput("setup_moreparams"), uiOutput("setupbtn")),
     column(4, uiOutput("sel_sdc_infovar"), uiOutput("ui_sdcObj_info"), align="center")

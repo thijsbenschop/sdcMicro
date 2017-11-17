@@ -1,27 +1,27 @@
 output$ui_rescat_riskinfo <- renderUI({
   output$ui_rescat_selection <- renderUI({
-    radioButtons("rb_riskselection", label=h5("What kind of results do you want to show?"),
+    radioButtons("rb_riskselection", label=h5(translate("What kind of results do you want to show?")),
       choices=c("Risk measures"="rescat_riskymeasures", "Risky observations"="rescat_riskyobs", "Plot of risk"="rescat_riskplot"),
       selected=input$rb_riskselection, inline=TRUE, width="100%")
   })
   output$rescat_riskymeasures <- renderUI({
     rI <- measure_riskComp()
-    txt_tooltip <- "These observations have a risk being larger than the median of the risk distribution plus two times "
-    txt_tooltip <- paste0(txt_tooltip, "its Median Absolute Deviation (MAD). The individual re-identification risk is computed based on the selected categorical key ")
-    txt_tooltip <- paste0(txt_tooltip, "variables,  and reflects both the frequencies of the keys in the data and the individual sampling weights.")
+    txt_tooltip <- translate("These observations have a risk being larger than the median of the risk distribution plus two times ")
+    txt_tooltip <- paste0(txt_tooltip, translate("its Median Absolute Deviation (MAD). The individual re-identification risk is computed based on the selected categorical key "))
+    txt_tooltip <- paste0(txt_tooltip, translate("variables,  and reflects both the frequencies of the keys in the data and the individual sampling weights."))
     out <- fluidRow(
-      column(12, h5("Risk measures"), align="center"),
-      column(12, p(code(rI$s),"observations (",code(rI$sorig),"in the original data) have an individual re-identification risk level higher than
-      the set benchmark value of",code(0.1),".", tipify(icon("question"), title=txt_tooltip, placement="top")), align="center"),
-      column(12, p("Based on the individual re-identification risk, we expect",code(rI$exp_reident_m),"re-identifications (",code(paste0(rI$exp_reident_mp,"%")),")
-      in the anonymized data set. In the original dataset we expected",code(rI$exp_reident_o),"(",code(paste0(rI$exp_reident_op,"%")),") re-identifications."), align="center")
+      column(12, h5(translate("Risk measures")), align="center"),
+      column(12, p(code(rI$s),translate("observations ("),code(rI$sorig),translate("in the original data) have an individual re-identification risk level higher than
+      the set benchmark value of"),code(0.1),".", tipify(icon("question"), title=txt_tooltip, placement="top")), align="center"),
+      column(12, p(translate("Based on the individual re-identification risk, we expect"),code(rI$exp_reident_m),translate("re-identifications ("),code(paste0(rI$exp_reident_mp,"%")),translate(")
+      in the anonymized data set. In the original dataset we expected"),code(rI$exp_reident_o),"(",code(paste0(rI$exp_reident_op,"%")),translate(") re-identifications.")), align="center")
     )
     if (rI$hierrisk) {
       out <- list(out, fluidRow(
-        column(12, h5("Expected number of re-identifications taking cluster information into account"), align="center"),
-        column(12, p("If cluster information is taken into account, we expect",code(rI$hier_exp_m),
-          "(",code(paste0(rI$hier_exp_mp,"%")),") re-identifications in the anonymized data set. In the original dataset we expected",
-          code(rI$hier_exp_o),"(",code(paste0(rI$hier_exp_op,"%")),") re-identifications."), align="center")))
+        column(12, h5(translate("Expected number of re-identifications taking cluster information into account")), align="center"),
+        column(12, p(translate("If cluster information is taken into account, we expect"),code(rI$hier_exp_m),
+          "(",code(paste0(rI$hier_exp_mp,"%")),translate(") re-identifications in the anonymized data set. In the original dataset we expected"),
+          code(rI$hier_exp_o),"(",code(paste0(rI$hier_exp_op,"%")),translate(") re-identifications.")), align="center")))
     }
     out
   })
@@ -56,7 +56,7 @@ output$ui_rescat_riskinfo <- renderUI({
     })
     # slider for minimal risk
     output$riskyobs_slider <- renderUI({
-      sliderInput("sl_riskyobs", label=h5("Minimum risk for to be shown in the table"), min=0, max=max(get_risk()$risk), value=0, width="100%")
+      sliderInput("sl_riskyobs", label=h5(translate("Minimum risk for to be shown in the table")), min=0, max=max(get_risk()$risk), value=0, width="100%")
     })
     output$riskyobs_result <- renderUI({
       # table containing the corresponding observations
@@ -74,11 +74,11 @@ output$ui_rescat_riskinfo <- renderUI({
       out <- NULL
       if (n == 0) {
         out <- list(out, fluidRow(
-          column(12, p(code(n),"(",code(p),") records have a risk larger than",code(input$sl_riskyobs),"."), align="center")
+          column(12, p(code(n),"(",code(p),translate(") records have a risk larger than"),code(input$sl_riskyobs),"."), align="center")
         ))
       } else {
         out <- list(out, fluidRow(
-          column(12, p(code(n),"(",code(p),") records have a risk larger than",code(input$sl_riskyobs),"."), align="center"),
+          column(12, p(code(n),"(",code(p),translate(") records have a risk larger than"),code(input$sl_riskyobs),"."), align="center"),
           column(12, dataTableOutput("tab_risk"))
         ))
       }
@@ -87,7 +87,7 @@ output$ui_rescat_riskinfo <- renderUI({
 
 
     out <- fluidRow(
-      column(12, h5("Display risky observations in a table", align="center")),
+      column(12, h5(translate("Display risky observations in a table"), align="center")),
       column(12, uiOutput("riskyobs_slider"), align="center"))
     out <- list(out, uiOutput("riskyobs_result"))
     out
@@ -100,7 +100,7 @@ output$ui_rescat_riskinfo <- renderUI({
         return(NULL)
       }
       rk <- get_risk()
-      hist(rk$risk, xlab="Risks", main="Individual risks (Anonymized data)", col="lightgrey")
+      hist(rk$risk, xlab=translate("Risk"), main=translate("Individual risk (Anonymized data)"), col="lightgrey")
     })
 
     output$plot_risk_orig <- renderPlot({
@@ -109,20 +109,20 @@ output$ui_rescat_riskinfo <- renderUI({
         return(NULL)
       }
       rk <- curObj@originalRisk$individual[,1]
-      hist(rk, xlab="Risks", main="Individual risks (Original data)", col="lightgrey")
+      hist(rk, xlab=translate("Risk"), main=translate("Individual risk (Original data)"), col="lightgrey")
     })
 
     fluidRow(
-      column(12, h5("Plot showing distribution of individual re-identification risk levels", align="center")),
-      column(12, h5("Anonymized data"), align="center"),
+      column(12, h5(translate("Plot showing distribution of individual re-identification risk levels"), align="center")),
+      column(12, h5(translate("Anonymized data")), align="center"),
       column(12, plotOutput("plot_risk"), align="center"),
-      column(12, h5("Original data"), align="center"),
+      column(12, h5(translate("Original data")), align="center"),
       column(12, plotOutput("plot_risk_orig"), align="center"))
   })
 
   out <- fluidRow(
-    column(12, h4("Risk measures"), align="center"),
-    column(12, p("The output on this page is based on the categorical key variables in the current problem."), align="center"),
+    column(12, h4(translate("Risk measures")), align="center"),
+    column(12, p(translate("The output on this page is based on the categorical key variables in the current problem.")), align="center"),
     column(12, uiOutput("ui_rescat_selection"), align="center"))
 
   if (!is.null(input$rb_riskselection)) {
@@ -168,11 +168,11 @@ output$ui_rescat_recodes <- renderUI({
   }, rownames=FALSE, options = list(scrollX=TRUE, pageLength = 10, searching=FALSE))
 
   fluidRow(
-    column(12, h4("Display information loss based on recodings of categorical key variables", align="center")),
-    column(12, p("For each categorical key variable, the following key figures are computed:", align="center")),
-    column(12, p("a) The number of categories in original and modified variables.", align = "left")),
-    column(12, p("b) The mean size of groups in original and modified variables.", align = "left")),
-    column(12, p("c) The size of the smallest category/group in original and modified variables.", align = "left")),
+    column(12, h4(translate("Display information loss based on recodings of categorical key variables"), align="center")),
+    column(12, p(translate("For each categorical key variable, the following key figures are computed:"), align="center")),
+    column(12, p(translate("a) The number of categories in original and modified variables."), align = "left")),
+    column(12, p(translate("b) The mean size of groups in original and modified variables."), align = "left")),
+    column(12, p(translate("c) The size of the smallest category/group in original and modified variables."), align = "left")),
     column(12, dataTableOutput("tab_recodes")))
 })
 
@@ -181,13 +181,13 @@ output$ui_rescat_ldiv <- renderUI({
   # sensitive variable
   output$ldiv_sensvar <- renderUI({
     vv <- setdiff(allVars(), c(get_weightVar_name(), get_keyVars_names()))
-    selectInput("ldiv_sensvar", label=h5("Select one or more sensitive variables"), selected=input$ldiv_sensvar, choices=vv, multiple=TRUE, width="100%")
+    selectInput("ldiv_sensvar", label=h5(translate("Select one or more sensitive variables")), selected=input$ldiv_sensvar, choices=vv, multiple=TRUE, width="100%")
   })
   # recursive constant
   output$ldiv_recconst <- renderUI({
     txt_tooltip <- ""
     sliderInput("ldiv_recconst",
-      label=h5("Select a value for the recursive constant", tipify(icon("question"), title=txt_tooltip, placement="top")),
+      label=h5(translate("Select a value for the recursive constant"), tipify(icon("question"), title=txt_tooltip, placement="top")),
       min=1, max=100, value=2, width="100%")
   })
   # button
@@ -196,11 +196,11 @@ output$ui_rescat_ldiv <- renderUI({
     if (length(input$ldiv_sensvar)==0) {
       return(NULL)
     }
-    myActionButton("btn_ldiv", label="Calculate l-diversity risk measure", btn.style="primary")
+    myActionButton("btn_ldiv", label=translate("Calculate l-diversity risk measure"), btn.style="primary")
   })
 
   output$ldiv_resetbtn <- renderUI({
-    myActionButton("btn_ldiv_restart", label="Reset to choose different input parameters", btn.style="danger")
+    myActionButton("btn_ldiv_restart", label=translate("Reset to choose different input parameters"), btn.style="danger")
   })
 
   # ldiversity-results
@@ -214,7 +214,7 @@ output$ui_rescat_ldiv <- renderUI({
     }, row.names=FALSE)
     req(input$ldiv_sensvar)
     out <- fluidRow(
-      column(12, h5("Summary statistics on distinct ldiversity"), align="center"),
+      column(12, h5(translate("Summary statistics on distinct ldiversity")), align="center"),
       column(12, tableOutput("ldiv_summary_table"), align="center"))
     out
   })
@@ -232,22 +232,22 @@ output$ui_rescat_ldiv <- renderUI({
     tab <- res$tab
     if (nrow(tab)>0) {
       out <- fluidRow(
-        column(12, h5("The following",nrow(tab),"records violate l-diversity in at least one sensible variable:"), align="center"),
+        column(12, h5(translate("The following"),nrow(tab),translate("records violate l-diversity in at least one sensible variable:")), align="center"),
         column(12, DT::dataTableOutput("ldiv_violating_tab"), align="center")
       )
     } else {
       out <- fluidRow(
-        column(12, p("No records violate l-diversity with the selected settings!"), align="center")
+        column(12, p(translate("No records violate l-diversity with the selected settings!")), align="center")
       )
     }
     out
   })
 
-  txt <- paste0("Here you can compute the ",tags$i("l"),"-diversity of sensitive variables. A dataset ")
-  txt <- paste0(txt, "satisfies ",tags$i("l"),"-diversity if for every key ",tags$i("k")," there are at least ")
-  txt <- paste0(txt, tags$i("l"), "different values for each of the sensitive variables. The statistics refer to the value of ",tags$i("l")," for each record.")
+  txt <- paste0(translate("Here you can compute the "),tags$i("l"),translate("-diversity of sensitive variables. A dataset "))
+  txt <- paste0(txt, translate("satisfies "),tags$i("l"),translate("-diversity if for every key "),tags$i("k"),translate(" there are at least "))
+  txt <- paste0(txt, tags$i("l"), translate("different values for each of the sensitive variables. The statistics refer to the value of "),tags$i("l"),translate(" for each record."))
   out <- fluidRow(
-    column(12, h4("l-diversity risk measure"), align="center"),
+    column(12, h4(translate("l-diversity risk measure")), align="center"),
     column(12, p(HTML(txt)), align="center"))
 
   res <- get_ldiv_result()
@@ -275,19 +275,19 @@ output$ui_rescat_ldiv <- renderUI({
 output$ui_rescat_suda2 <- renderUI({
   # DisFraction
   output$suda2_disf <- renderUI({
-    txt_tooltip <- "This is the sampling fraction for a simple random sample and the common sampling fraction for stratified samples. The defaut value is 0.1, which corresponds to a 10 percent sample. "
-    txt_tooltip <- paste0(txt_tooltip, "Note that SUDA is sensitive to the sampling fraction and a wrong value can produce distorted results.")
+    txt_tooltip <- translate("This is the sampling fraction for a simple random sample and the common sampling fraction for stratified samples. The defaut value is 0.1, which corresponds to a 10 percent sample. ")
+    txt_tooltip <- paste0(txt_tooltip, translate("Note that SUDA is sensitive to the sampling fraction and a wrong value can produce distorted results."))
     sliderInput("suda2_disf",
-      label=h5("Specify the sampling fraction for the stratified sampling", tipify(icon("question"), title=txt_tooltip, placement="top")),
+      label=h5(translate("Specify the sampling fraction for the stratified sampling"), tipify(icon("question"), title=txt_tooltip, placement="top")),
       min=0.01, max=0.5, step=0.01,value=0.1, width="100%")
   })
   # button
   output$suda2_btn <- renderUI({
     req(input$suda2_disf)
-    myActionButton("btn_suda2", label="Calculate suda2-scores", btn.style="primary")
+    myActionButton("btn_suda2", label=translate("Calculate suda2-scores"), btn.style="primary")
   })
   output$suda2_resetbtn <- renderUI({
-    myActionButton("btn_suda2_restart", label="Reset to choose a different sampling fraction parameter", btn.style="danger")
+    myActionButton("btn_suda2_restart", label=translate("Reset to choose a different sampling fraction parameter"), btn.style="danger")
   })
   # suda2-results
   output$suda2_result <- renderUI({
@@ -297,11 +297,11 @@ output$ui_rescat_suda2 <- renderUI({
     }
 
     fluidRow(
-      column(12, h5(strong(paste0("Suda scores (sampling fraction is ",suda2$DisFraction,")"))), align="center"),
-      column(12, p("The table below shows the frequencies of the records with a suda score in the specified intervals."), align="center"),
+      column(12, h5(strong(paste0(translate("Suda scores (sampling fraction is "),suda2$DisFraction,")"))), align="center"),
+      column(12, p(translate("The table below shows the frequencies of the records with a suda score in the specified intervals.")), align="center"),
       column(12, renderTable(suda2$thresholds), align="center"),
-      column(12, h5(strong("Attribute contributions")), align="center"),
-      column(12, p("The table below shows the contribution of each categorical key variable to the SUDA scores. The contribution of a variable is the percentage of the total MSUs in the file that include this variable."), align="center"),
+      column(12, h5(strong(translate(translate("Attribute contributions")))), align="center"),
+      column(12, p(translate("The table below shows the contribution of each categorical key variable to the SUDA scores. The contribution of a variable is the percentage of the total MSUs in the file that include this variable.")), align="center"),
       column(12, renderTable(suda2$attribute_contributions), align="center")
     )
   })
@@ -309,16 +309,16 @@ output$ui_rescat_suda2 <- renderUI({
   # suda2 can only be calculated for sdcProblems with >= 3 categorical key variables
   if (length(get_keyVars())<=2) {
     return(fluidRow(
-      column(12, h4("Suda2 risk measure", align="center")),
-      column(12, p("Suda2 scores can only be computed for scenarios with",code(">= 3"),"categorical key variables!", align="center"))
+      column(12, h4(translate("Suda2 risk measure"), align="center")),
+      column(12, p(translate("Suda2 scores can only be computed for scenarios with"),code(">= 3"),translate("categorical key variables!"), align="center"))
     ))
   }
 
   out <- fluidRow(
-    column(12, h4("suda2 risk measure", align="center")),
-    column(12, p("The SUDA algorithm is used to search for Minimum Sample Uniques (MSU) in the data among the sample uniques to determine
+    column(12, h4(translate("suda2 risk measure"), align="center")),
+    column(12, p(translate("The SUDA algorithm is used to search for Minimum Sample Uniques (MSU) in the data among the sample uniques to determine
       which sample uniques are also special uniques i.e., have subsets that are also unique. See the help files for more
-      information on SUDA scores."), align="center"))
+      information on SUDA scores.")), align="center"))
 
   if (is.null(get_suda2_result())) {
     out <- list(out, fluidRow(
@@ -348,9 +348,9 @@ output$ui_rescat_violating_kanon <- renderUI({
   })
 
   output$ui_kanon_selection <- renderUI({
-    txt_tooltip <- "All records violating the k-anonymity for k equal to the set threshold are displayed."
+    txt_tooltip <- translate("All records violating the k-anonymity for k equal to the set threshold are displayed.")
     sl <- sliderInput("k_val_violating",
-      label=h5("Select value for 'k'", tipify(icon("question"), title=txt_tooltip, placement="top")),
+      label=h5(translate("Select value for 'k'"), tipify(icon("question"), title=txt_tooltip, placement="top")),
       value=3, min=1, max=50, step=1, width="100%")
     fluidRow(column(12, div(sl, align="center")))
   })
@@ -362,14 +362,14 @@ output$ui_rescat_violating_kanon <- renderUI({
     fk <- get_risk()$fk
     n1 <- sum(fk < input$k_val_violating)
     n2 <- paste0("(",formatC(100*(n1/length(fk)), format="f", digits=3),"%)")
-    res <- h4(code(n1),"observations", code(n2),"violate ",input$k_val_violating,"-anonymity")
+    res <- h4(code(n1),translate("observations"), code(n2),translate("violate "),input$k_val_violating,translate("-anonymity"))
     fluidRow(column(12, div(res, align="center")))
   })
 
   out <- list(
     fluidRow(
-      column(12, h4("Observations violating k-anonymity"), align="center"),
-      column(12, p("Here you can browse the records that violate k-anonymity for a specified level of k."), align="center")),
+      column(12, h4(translate("Observations violating k-anonymity")), align="center"),
+      column(12, p(translate("Here you can browse the records that violate k-anonymity for a specified level of k.")), align="center")),
     uiOutput("ui_kanon_selection"),
     uiOutput("ui_kanon_result"),
     fluidRow(column(12, dataTableOutput("violating_obs_tab"))))
@@ -402,7 +402,7 @@ output$ui_catvar2 <- renderUI({
       sel <- input$sel_catvar2
     }
   }
-  selectInput("sel_catvar2", label=h5("Variable 2"), choices=kv, selected=sel, width="100%")
+  selectInput("sel_catvar2", label=h5(translate("Variable 2")), choices=kv, selected=sel, width="100%")
 })
 
 # mosaicplot of one or two categorical key-variables
@@ -442,11 +442,11 @@ output$ui_rescat_mosaicplot <- renderUI({
     }
   })
   out <- list(
-    fluidRow(column(12, h4("Graphical representation of original and modified data"), align="center")),
+    fluidRow(column(12, h4(translate("Graphical representation of original and modified data")), align="center")),
     uiOutput("ui_mosaic_selection"),
-    fluidRow(column(12, h4("Original data"), align="center")),
+    fluidRow(column(12, h4(translate("Original data")), align="center")),
     fluidRow(column(12, plotOutput("mosaicplot_o", height="600px"))),
-    fluidRow(column(12, h4("Modified data"), align="center")),
+    fluidRow(column(12, h4(translate("Modified data")), align="center")),
     fluidRow(column(12, plotOutput("mosaicplot_m", height="600px"))))
   out
 })
@@ -470,9 +470,9 @@ output$ui_bivariate_tab <- renderUI({
     tab <- as.data.frame.table(tab)
     tab$Freq <- as.integer(tab$Freq)
     if (ncol(tab)==2) {
-      colnames(tab) <- c(vars[1], "Freq")
+      colnames(tab) <- c(vars[1], translate("Freq"))
     } else {
-      colnames(tab) <- c(vars, "Freq")
+      colnames(tab) <- c(vars, translate("Freq"))
     }
     tab
   })
@@ -500,12 +500,12 @@ output$ui_bivariate_tab <- renderUI({
   })
 
   out <- list(
-    fluidRow(column(12, h4("Tabular representation of original and modified data"), align="center")),
+    fluidRow(column(12, h4(translate("Tabular representation of original and modified data")), align="center")),
     uiOutput("ui_biv_selection"))
 
   out <- list(out, fluidRow(
-    column(6, h4("Original data"), align="center"),
-    column(6, h4("Modified data"), align="center")
+    column(6, h4(translate("Original data")), align="center"),
+    column(6, h4(translate("Modified data")), align="center")
   ))
 
   out <- list(out, fluidRow(

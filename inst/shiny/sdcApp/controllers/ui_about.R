@@ -83,32 +83,32 @@ output$ui_about <- renderUI({
     ))
   }
 
-  pp <- textInput("path_export_data", label=p("Enter a directory where any exported files (data, script, problem instances) should be saved to"),
-    placeholder=paste("e.g:", obj$path_export), width="80%")
-  stop_btn <- bsButton("stop_sdcApp", label="Stop the GUI", style="primary", size="extra-small", class="wb-btn-inline", onclick="setTimeout(function(){window.close();},500);")
+  pp <- textInput("path_export_data", label=p(translate("Enter a directory where any exported files (data, script, problem instances) should be saved to")),
+    placeholder=paste(translate("e.g:"), obj$path_export), width="80%")
+  stop_btn <- bsButton("stop_sdcApp", label=translate("Stop the GUI"), style="primary", size="extra-small", class="wb-btn-inline", onclick="setTimeout(function(){window.close();},500);")
   out <- list(out, fluidRow(
-    column(width = 8, offset = 2, h4(("Set storage path"))),
-    column(width = 8, offset = 2, p("Currently, all output, such as anonymized data, scripts and reports, will be saved to",code(obj$path_export),".")),
-    column(width = 8, offset = 2, p("You can change the default path, where all output from the GUI will be saved. You can change this path any time
-      later as well by returing to this tab.")),column(width = 8, offset = 2, pp),
+    column(width = 8, offset = 2, h4((translate("Set storage path")))),
+    column(width = 8, offset = 2, p(translate("Currently, all output, such as anonymized data, scripts and reports, will be saved to"),code(obj$path_export),".")),
+    column(width = 8, offset = 2, p(translate("You can change the default path, where all output from the GUI will be saved. You can change this path any time
+      later as well by returing to this tab."))),column(width = 8, offset = 2, pp),
     column(width = 8, offset = 2, uiOutput("btn_update_export_path")),
-    column(width = 8, offset = 2, h4(("Stop the interface"))),
-    column(width = 8, offset = 2, p("By clicking ", stop_btn,", you can stop the graphical user interface at any time during the anonymization process.
-      If you have started the interface as",code('x <- sdcApp()'),",",code("x"),
-      "will contain the micro data and the sdc problem at the state just before stopping the GUI.")),
-    column(width = 8, offset = 2, h4(("Restart the interface"))),
-    column(width = 8, offset = 2, p("Should you accidentally close this browser window, you can open your current problem instance by entering the local IP address
-      specified in the",code("R"),"console in which you started the GUI. The address starts with", code("http://127.0.0.1:"), ". You
-      can also use the refresh button of your browser in case the GUI freezes."))
+    column(width = 8, offset = 2, h4((translate("Stop the interface")))),
+    column(width = 8, offset = 2, p(translate("By clicking "), stop_btn,translate(", you can stop the graphical user interface at any time during the anonymization process.
+      If you have started the interface as"),code('x <- sdcApp()'),",",code("x"),
+                                    translate("will contain the micro data and the sdc problem at the state just before stopping the GUI."))),
+    column(width = 8, offset = 2, h4((translate("Restart the interface")))),
+    column(width = 8, offset = 2, p(translate("Should you accidentally close this browser window, you can open your current problem instance by entering the local IP address
+      specified in the"),code("R"),translate("console in which you started the GUI. The address starts with"), code("http://127.0.0.1:"), translate(". You
+      can also use the refresh button of your browser in case the GUI freezes.")))
   ))
 
   out <- list(out, fluidRow(
-    column(width = 8, offset = 2, h4(("Contact and Feedback"))),
-    column(width = 8, offset = 2, p("In case you have any suggestions or bug reports, please file an issue at the",
-      tags$a("issue tracker", href="https://www.github.com/alexkowa/sdcMicro/issues", target="_blank"),"in our",
-      tags$a("GitHub repo", href="https://www.github.com/alexkowa/sdcMicro", target="_blank"),".")),
-    column(width = 8, offset = 2, p("Before reporting any bugs, please make sure that you are working with an up-to-date",tags$b("R"),"installation and
-      that all packages have been updated. You can do so by entering",code("update.packages(ask=FALSE)"),"into your",code("R"),"prompt."))
+    column(width = 8, offset = 2, h4((translate("Contact and Feedback")))),
+    column(width = 8, offset = 2, p(translate("In case you have any suggestions or bug reports, please file an issue at the"),
+      tags$a(translate("issue tracker"), href="https://www.github.com/alexkowa/sdcMicro/issues", target="_blank"),translate("in our"),
+      tags$a(translate("GitHub repo"), href="https://www.github.com/alexkowa/sdcMicro", target="_blank"),".")),
+    column(width = 8, offset = 2, p(translate("Before reporting any bugs, please make sure that you are working with an up-to-date"),tags$b("R"),translate("installation and
+      that all packages have been updated. You can do so by entering"),code("update.packages(ask=FALSE)"),translate("into your"),code("R"),translate("prompt.")))
   ))
   out
 })
