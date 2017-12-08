@@ -384,6 +384,6 @@ NULL
 #' @format dictionary: a data frame with strings translated
 #' \describe{
 #' \item{en}{original strings in English}
-#' \item{nl}{Dutch translation}}
+#' \item{fr}{French translation}}
 #' @keywords datasets
 NULL

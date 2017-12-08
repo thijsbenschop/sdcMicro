@@ -30,14 +30,21 @@ shinyServer(function(session, input, output) {
     if (lang == 'English'){
       return(paste("EN", txt))
     } else if (lang == 'Nederlands') {
+      #id <- which(txt == dict[,'en'])
+      #if(length(id) != 0){
+      #  return(paste0("NL ", dict[id, 'nl']))
+      #} else {
+      #  return(paste0("NL Geen vertaling gevonden voor '", txt, "'"))
+      #}
+      return(paste0("NL Dutch translation not available: ", txt))
+    } else if (lang == 'Francais') {
       id <- which(txt == dict[,'en'])
       if(length(id) != 0){
-        return(paste0("NL ", dict[id, 'nl']))
+        return(dict[id, 'fr'])
       } else {
-        return(paste0("NL Geen vertaling gevonden voor '", txt, "'"))
+        return(paste0("FR Pas de traduction pour '", txt, "'"))
       }
-    } else if (lang == 'Francais') {
-      return(paste0("FR French translation not available: ", txt))
+      #return(paste0("FR French translation not available: ", txt))
       }
   }
   # Function to set language options for DT
