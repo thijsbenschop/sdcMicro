@@ -788,7 +788,7 @@ output$ui_sdcObj_info <- renderUI({
 })
 
 output$sel_sdc_infovar <- renderUI({
-  selectInput("sel_infov", label=h4(translate(translate("Explore variables")), class="wb-block-title"), choices=allVars(), width="100%")
+  selectInput("sel_infov", label=h4(translate("Explore variables"), class="wb-block-title"), choices=allVars(), width="100%")
 })
 
 output$ui_sdcObj_create <- renderUI({
