@@ -6,6 +6,20 @@ library(haven)
 library(DT)
 library(shinyBS)
 library(data.table)
+
+if (!getShinyOption("sdcAppInvoked", FALSE)) {### Beginning required code for deployment
+  .startdir <- .guitheme <- .guijsfile <- NULL
+  maxRequestSize <- 50
+  options(shiny.maxRequestSize=ceiling(maxRequestSize)*1024^2)
+
+  shinyOptions(.startdir = getwd())
+
+  theme="IHSN"
+  shinyOptions(.guitheme = "ihsn-root.css")
+  shinyOptions(.guijsfile = "js/ihsn-style.js")
+}## End of deployment code
+
+
 # required that 'dQuote()' works nicely when
 # outputting R-Code
 options(useFancyQuotes=FALSE)
@@ -79,7 +93,14 @@ runEvalStrMicrodat_no_errorchecking <- function(cmd, comment=NULL) {
 # runEvaluationString and update Objects for microdata-modifications
 runEvalStrMicrodat <- function(cmd, comment=NULL) {
   # evaluate using tryCatchFn()
-  cmdeval <- gsub("inputdata","obj$inputdata", cmd)
+  # if we read an existing object from R, we need to use sub (in case the obj is called inputdata)
+  is_from_df <- grep('type="rdf"', cmd)
+  if (length(is_from_df)>0) {
+    cmdeval <- sub("inputdata","obj$inputdata", cmd)
+  } else {
+    cmdeval <- gsub("inputdata","obj$inputdata", cmd)
+  }
+
   cmdeval <- strsplit(cmdeval, "<-")[[1]][2]
   evalstr <- paste0("res <- sdcMicro:::tryCatchFn({",cmdeval,"})")
   #cat("evalstr:", evalstr,"\n")
@@ -88,7 +109,6 @@ runEvalStrMicrodat <- function(cmd, comment=NULL) {
   if (!"simpleError" %in% class(res)) {
     obj$last_error <- NULL
     obj$inputdata <- res; rm(res)
-
     if (!is.null(comment)) {
       cmd <- paste0(comment,"\n",cmd)
     }
@@ -181,7 +201,7 @@ myErrBtn <- function(id, label, btn.style="danger") {
 # does not immediately react to user input
 customTextInput <- function(inputId, label, value = "") {
   tagList(
-    singleton(tags$head(tags$script(src = "js/customTextInputBinding.js"))),
+    singleton(tags$head(tags$script(src = "sdcwww/js/customTextInputBinding.js"))),
     tags$label(label, `for` = inputId),
     tags$input(id = inputId, type = "text", value = value, class = "returnTextInput")
   )
@@ -215,8 +235,8 @@ summaryfn <- function(x) {
 }
 
 # global, reactive data-structure
-data(testdata)
-data(testdata2)
+data(testdata, envir = environment())
+data(testdata2, envir = environment())
 testdata$urbrur <- factor(testdata$urbrur)
 testdata$urbrur[sample(1:nrow(testdata), 10)] <- NA
 testdata$roof <- factor(testdata$roof)
@@ -377,7 +397,7 @@ obj$stata_labs <- NULL
 obj$stata_varnames <- NULL
 
 # the path, where all output will be saved to
-pp <- .startdir
+pp <- getShinyOption(".startdir", getwd())
 if (file.access(pp, mode=2)==0) {
   obj$path_export <- pp
 } else {
