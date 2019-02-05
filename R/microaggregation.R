@@ -81,6 +81,7 @@
 #' \item{\code{aggr}: }{aggregation level}
 #' \item{\code{measure}: }{proximity measure for aggregation}}
 #' @note if only one variable is specified, \code{\link{mafast}} is applied and argument \code{method} is ignored.
+#' Parameters \code{measure} are ignored for methods \code{mdav} and \code{rmd}.
 #' @author Matthias Templ, Bernhard Meindl
 #'
 #' For method \dQuote{mdav}: This work is being supported by the International
@@ -138,6 +139,10 @@
 microaggregation <- function(obj, variables=NULL, aggr=3, strata_variables=NULL,
   method="mdav", weights=NULL, nc=8, clustermethod="clara",
   measure="mean", trim=0, varsort=1, transf="log") {
+
+  if (!is.data.frame(obj) & !is.null(strata_variables)) {
+    message("Argument 'strata_variables' is ignored. Only variables specified in slot 'strataVar' (if any) of the input object are used!\n")
+  }
   microaggregationX(obj=obj, variables=variables, aggr=aggr, strata_variables=strata_variables,
     method=method, weights=weights, nc=nc, clustermethod=clustermethod,
     measure=measure, trim=trim, varsort=varsort, transf=transf)
