@@ -1,6 +1,9 @@
 library(shiny)
 
 shinyServer(function(session, input, output) {
+  wd <- setwd(getShinyOption(".appDir", getwd()))
+  on.exit(setwd(wd))
+
   for (file in list.files("controllers")) {
     source(file.path("controllers", file), local=TRUE)
   }
@@ -646,6 +649,7 @@ shinyServer(function(session, input, output) {
     cmd <- paste0("writeSafeFile(obj=sdcObj, format=",dQuote(input$dat_exp_type), ", randomizeRecords=",dQuote(input$rb_export_randomizeorder))
     if (input$dat_exp_type=="dta") {
       cmd <- paste0(cmd,", lab=obj$stata_labs")
+      cmd <- paste0(cmd,", version=", input$export_dta_version)
     }
     if (input$dat_exp_type=="csv") {
       cmd <- paste0(cmd, ", col.names=",input$export_csv_header)
@@ -931,7 +935,7 @@ shinyServer(function(session, input, output) {
     })
     obj$rbs <- lapply(1:nrKeyVars, function(i) {
       id <- paste0("rb_kanon_usecombs_", i)
-      radioButtons(id, label=p(paste("Apply k-anonimity to all subsets of",i,"key variables?")),
+      radioButtons(id, label=p(paste("Apply k-anonymity to all subsets of",i,"key variables?")),
         selected=input[[id]], width="100%", inline=TRUE, choices=c("No", "Yes"))
     })
     # reset all menu items to first choice

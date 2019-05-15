@@ -5,8 +5,8 @@
 \alias{shuffle}
 \title{Shuffling and EGADP}
 \usage{
-shuffle(obj, form, method = "ds", weights = NULL, covmethod = "spearman",
-  regmethod = "lm", gadp = TRUE)
+shuffle(obj, form, method = "ds", weights = NULL,
+  covmethod = "spearman", regmethod = "lm", gadp = TRUE)
 }
 \arguments{
 \item{obj}{An object of class sdcMicroObj or a data.frame including the
@@ -71,7 +71,7 @@ covariance and correlation estimations in the whole gadp and shuffling
 function.
 }
 \examples{
-data(Prestige,package="car")
+data(Prestige,package="carData")
 form <- formula(income + education ~ women + prestige + type, data=Prestige)
 sh <- shuffle(obj=Prestige,form)
 plot(Prestige[,c("income", "education")])

@@ -2,10 +2,12 @@ Package: sdcMicro
 Type: Package
 Title: Statistical Disclosure Control Methods for Anonymization of Microdata and
     Risk Estimation
-Version: 5.1.0
-Date: 2018-01-26
-Author: Matthias Templ, Alexander Kowarik, Bernhard Meindl
-Maintainer: Matthias Templ <matthias.templ@gmail.com>
+Version: 5.3.0
+Date: 2018-05-15
+Authors@R: c(
+  person("Matthias", "Templ", email="matthias.templ@gmail.com", role = c("aut", "cre")),
+  person("Bernhard", "Meindl", email = "Bernhard.Meindl@statistik.gv.at", role = c("aut")),
+  person("Alexander", "Kowarik", email="Alexander.Kowarik@statistik.gv.at", role = "aut", comment=c(ORCID="0000-0001-8598-4130")))
 Description: Data from statistical agencies and other institutions are mostly
     confidential. This package can be used for the generation of anonymized
     (micro)data, i.e. for the creation of public- and scientific-use files. In
@@ -24,6 +26,7 @@ Imports:
     stats,
     graphics,
     car,
+    carData,
     rmarkdown,
     knitr,
     data.table,
@@ -72,6 +75,7 @@ Collate:
     'microaggregation.R'
     'modRisk.R'
     'muargus_compatibility_functions.R'
+    'mvTopCoding.R'
     'plotFunctions.R'
     'plotMicro.R'
     'pram.R'
@@ -91,5 +95,6 @@ Collate:
     'maG.R'
     'sdcApp.R'
     'show_sdcMicroObj.R'
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
 VignetteBuilder: knitr
+Encoding: UTF-8
