@@ -572,7 +572,7 @@ sdcData <- reactive({
 
 output$setupTable <- DT::renderDataTable({
   sdcData()
-}, server=TRUE, escape=FALSE, rownames=FALSE, selection='none', style='bootstrap', class='table-condensed',
+}, server=FALSE, escape=FALSE, rownames=FALSE, selection='none', style='bootstrap', class='table-condensed',
 options = list(
   scrollX=TRUE, scrollY=380, searching=FALSE, paging=FALSE, ordering=FALSE, bInfo=FALSE, autoWidth=FALSE,
   # columnDefs=list(list(width='400px', targets = c(2))),
