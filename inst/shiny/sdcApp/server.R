@@ -37,7 +37,7 @@ shinyServer(function(session, input, output) {
       #  return(paste0("NL Geen vertaling gevonden voor '", txt, "'"))
       #}
       return(paste0("NL Dutch translation not available: ", txt))
-    } else if (lang == 'Francais') {
+    } else if (lang == 'Français') {
       id <- which(txt == dict[,'en'])
       if(length(id) != 0){
         return(dict[id, 'fr'])

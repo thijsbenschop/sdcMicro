@@ -59,7 +59,7 @@ observeEvent(input$stop_sdcApp,{
 
 output$ui_about <- renderUI({
   btn_credits <- bsButton("btn_credits", translate("here"), style="primary", size="extra-small", class="wb-btn-inline")
-  selLan <- selectInput("language", label=NULL, choices=c("English", "Nederlands", "Francais"),
+  selLan <- selectInput("language", label=NULL, choices=c("English", "Nederlands", "Français"),
                               selected=input$language, width="100%")
   out <- fluidRow(
     column(width = 10), column(width=2, selLan),
