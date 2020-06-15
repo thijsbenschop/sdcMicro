@@ -5,10 +5,20 @@
 \alias{microaggregation}
 \title{Microaggregation}
 \usage{
-microaggregation(obj, variables = NULL, aggr = 3,
-  strata_variables = NULL, method = "mdav", weights = NULL, nc = 8,
-  clustermethod = "clara", measure = "mean", trim = 0, varsort = 1,
-  transf = "log")
+microaggregation(
+  obj,
+  variables = NULL,
+  aggr = 3,
+  strata_variables = NULL,
+  method = "mdav",
+  weights = NULL,
+  nc = 8,
+  clustermethod = "clara",
+  measure = "mean",
+  trim = 0,
+  varsort = 1,
+  transf = "log"
+)
 }
 \arguments{
 \item{obj}{either an object of class \code{\link{sdcMicroObj-class}} or a \code{data.frame}}
@@ -131,8 +141,6 @@ strataVar(sdc) <- "relat"
 sdc <- microaggregation(sdc, variables=c("savings"))
 }
 \references{
-\url{http://www.springerlink.com/content/v257655u88w2/?sortorder=asc&p\_o=20}
-
 Templ, M. and Meindl, B., \emph{Robust Statistics Meets SDC: New Disclosure
 Risk Measures for Continuous Microdata Masking}, Lecture Notes in Computer
 Science, Privacy in Statistical Databases, vol. 5262, pp. 113-126, 2008.

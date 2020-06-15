@@ -9,10 +9,22 @@
 \alias{strataVar<-,sdcMicroObj,characterOrNULL-method}
 \title{Class \code{"sdcMicroObj"}}
 \usage{
-createSdcObj(dat, keyVars, numVars = NULL, pramVars = NULL,
-  ghostVars = NULL, weightVar = NULL, hhId = NULL,
-  strataVar = NULL, sensibleVar = NULL, excludeVars = NULL,
-  options = NULL, seed = NULL, randomizeRecords = FALSE, alpha = 1)
+createSdcObj(
+  dat,
+  keyVars,
+  numVars = NULL,
+  pramVars = NULL,
+  ghostVars = NULL,
+  weightVar = NULL,
+  hhId = NULL,
+  strataVar = NULL,
+  sensibleVar = NULL,
+  excludeVars = NULL,
+  options = NULL,
+  seed = NULL,
+  randomizeRecords = FALSE,
+  alpha = 1
+)
 
 undolast(object)
 
@@ -163,7 +175,7 @@ sdc@risk$model
 ## we can also specify ghost (linked) variables
 ## these variables are linked to some categorical key variables
 ## and have the sampe suppression pattern as the variable that they
-## are linked to after \\code{\\link{localSuppression}} has been applied
+## are linked to after \code{\link{localSuppression}} has been applied
 data(testdata)
 testdata$electcon2 <- testdata$electcon
 testdata$electcon3 <- testdata$electcon
